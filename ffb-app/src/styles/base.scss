@@ -1,0 +1,39 @@
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: $font-family;
+  font-size: $base-font-size;
+  line-height: 1.5;
+  color: $body-color;
+  margin: 0;
+  padding: 0;
+}
+body {
+  margin: 0;
+  padding: 0;
+  color: $body-color;
+  min-height: 100vh;
+  overscroll-behavior-x: none;
+  overflow: hidden;
+}
+
+.app {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 56px 1fr;
+  overflow: hidden;
+  &--light {
+    background: $light-background;
+  }
+  &--dark {
+    background: $dark-background;
+  }
+}

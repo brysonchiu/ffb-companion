@@ -1,0 +1,32 @@
+//Colors
+$primary-blue: hsla(214, 100%, 15%, 1);
+$green: hsla(171, 100%, 46%, 1);
+$red: hsla(350, 100%, 66%, 1);
+$yellow: hsla(51, 98%, 65%, 1);
+$darkest-blue: hsla(216, 100%, 10%, 1);
+$dark-blue: hsla(214, 44%, 19%, 1);
+$mid-blue: hsla(216, 45%, 81%, 1);
+$light-gray: hsla(210, 18%, 96%, 1);
+$white: hsla(60, 100%, 100%, 1);
+
+//Assign Colors
+$primary: $primary-blue;
+$secondary: $mid-blue;
+$starred: $green;
+$favorited: $yellow;
+$hated: $red;
+$darkest: $dark-blue;
+$dark: $dark-blue;
+$mid: $mid-blue;
+$light: $light-gray;
+$lightest: $white;
+
+//Base Colors
+$light-background: $light;
+$dark-background: $darkest;
+
+//Typography
+$body-color: $primary;
+$heading-colors: $primary;
+$font-family: Arial, sans-serif;
+$base-font-size: 16px;

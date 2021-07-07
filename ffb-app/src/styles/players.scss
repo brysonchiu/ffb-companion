@@ -1,0 +1,225 @@
+//Overall List
+.overall-list {
+  border-right: 2px solid $darkest;
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  .player-list {
+    padding: 0 1.5rem 1rem;
+    overflow-y: scroll;
+  }
+  .list-head {
+    margin: 1rem 1.5rem 0;
+  }
+  .player-card__team {
+    flex: 1 1 auto;
+  }
+}
+
+//Positional List
+.positional-list__container {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  overflow-y: hidden;
+  display: flex;
+  .positional-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .player-list {
+    overflow-y: scroll;
+    margin: 0;
+  }
+  .player-card__name {
+    flex: 1 1 auto;
+    margin-right: 16px;
+  }
+}
+
+//List Heads
+.list-head {
+  margin: 1rem 1.5rem 0;
+  border-bottom: 2px solid $darkest;
+  flex: 0 0 auto;
+}
+
+//Lists
+.player-list {
+  flex: 1 1 auto;
+  height: 100%;
+  padding: 0 1.5rem 1rem;
+}
+
+//Player Card
+.player-card {
+  margin: 0.75rem 0;
+  padding: 0.25rem 0.25rem;
+  overflow: hidden;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background: $lightest;
+  width: 100%;
+  height: 38px;
+  border: 2px solid $lightest;
+  &__rank {
+    background: $primary;
+    position: relative;
+    padding: 0 2px;
+    margin: 0 0.25rem;
+    width: 32px;
+    text-align: center;
+    color: $lightest;
+    font-weight: 700;
+    flex: 0 0 auto;
+    border-radius: 8px;
+    @extend .small2;
+  }
+  &__name {
+    padding-top: 1px;
+    margin: 0 0.25rem;
+    font-weight: 700;
+    font-size: 1rem;
+    white-space: nowrap;
+  }
+  &__position {
+    padding-top: 1px;
+    margin: 0 0.25rem 0;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+  }
+  &__team {
+    padding-top: 1px;
+    text-transform: uppercase;
+    margin: 4.5px 0.25rem 0;
+    @extend .small3;
+  }
+  &__pnts {
+    padding-top: 1px;
+    margin: 0 0.25rem;
+    font-weight: bold;
+    @extend small;
+  }
+}
+
+//Stats Table
+.stats-table {
+  padding-top: 1px;
+  caption {
+    position: static;
+  }
+  td {
+    @extend .small3;
+  }
+  th {
+    @extend .small4;
+  }
+  td,
+  th {
+    text-align: center;
+    font-weight: bold;
+    line-height: 1.1;
+    padding: 0 6px;
+  }
+}
+
+//Player Hover
+.player-card:hover:not(.player-card--picked):not(.player-card--hate):not(.player-card--favorite):not(.player-card--star) {
+  border: 2px solid $primary;
+}
+
+//Player Status
+.player-card__sentiment {
+  padding-top: 1px;
+  display: flex;
+  align-items: center;
+  margin: 0 0.25rem;
+  .player-card__button {
+    height: 16px;
+    cursor: pointer;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 0;
+    margin: 0 3px;
+    &:first-of-type {
+      margin: 0 3px 0 0;
+    }
+    &:last-of-type {
+      margin: 0 0 0 3px;
+    }
+  }
+  .player-card__button svg {
+    height: 15px;
+    width: 15px;
+  }
+}
+.player-card button svg path {
+  fill: $primary;
+}
+
+// Starred
+.player-card--starred {
+  background: $starred;
+  border: 2px solid $starred;
+  .player-card__rank {
+    color: $starred;
+  }
+  .player-card__button--favorite svg path,
+  .player-card__button--hate svg path {
+    opacity: 0.25;
+  }
+}
+
+// Favorited
+.player-card--favorited {
+  background: $favorited;
+  border: 2px solid $favorited;
+  .player-card__rank {
+    color: $favorited;
+  }
+  .player-card__button--star svg,
+  .player-card__button--hate svg {
+    opacity: 0.25;
+  }
+}
+
+// Hated
+.player-card--hated {
+  background: $hated;
+  border: 2px solid $hated;
+  .player-card__rank {
+    color: $hated;
+  }
+  .player-card__button--star svg,
+  .player-card__button--favorite svg {
+    opacity: 0.25;
+  }
+}
+
+// Drafted
+.player-card--drafted {
+  background: $light;
+  border-color: $secondary;
+  color: $secondary;
+  .player-card__rank {
+    color: $light;
+    background: $secondary;
+  }
+  .player-card__button--star svg path,
+  .player-card__button--favorite svg path,
+  .player-card__button--hate svg path {
+    fill: $secondary;
+  }
+  &:hover {
+    border-color: $primary;
+    color: $primary;
+    .player-card__rank {
+      background: $primary;
+    }
+  }
+}

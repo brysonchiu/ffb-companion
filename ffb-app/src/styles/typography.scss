@@ -1,0 +1,36 @@
+// Base Typography
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: $heading-colors;
+  margin: 0;
+}
+h1 {
+  font-size: 2.074rem;
+}
+h2 {
+  font-size: 1.728rem;
+}
+h3 {
+  font-size: 1.44rem;
+}
+h4 {
+  font-size: 1.2rem;
+}
+small,
+.small1 {
+  font-size: 0.833rem;
+}
+.small2 {
+  font-size: 0.694rem;
+}
+.small3 {
+  font-size: 0.579rem;
+}
+.small4 {
+  font-size: 0.482rem;
+}
+// Compontents
