@@ -44,6 +44,38 @@
   margin: 1rem 1.5rem 0;
   border-bottom: 2px solid $darkest;
   flex: 0 0 auto;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  position: relative;
+  .list-heading {
+    margin-right: 1rem;
+  }
+  .stats-dropdrown__container {
+    .icon__down-arrow {
+      position: absolute;
+      right: 0;
+      top: 53%;
+    }
+  }
+  select.stats-dropdrown::-ms-expand {
+    display: none;
+  }
+  .stats-dropdrown {
+    appearance: none;
+    background: none;
+    border: none;
+    font-weight: bold;
+    color: $primary;
+    padding-right: 15px;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: inherit;
+    line-height: inherit;
+    z-index: 2;
+    position: relative;
+    outline: none;
+  }
 }
 
 //Lists
@@ -55,18 +87,20 @@
 
 //Player Card
 .player-card {
+  min-width: 450px;
   margin: 0.75rem 0;
-  padding: 0.25rem 0.25rem;
+  padding: 0.35rem 0.15rem;
   overflow: hidden;
   border-radius: 4px;
   display: flex;
-  align-items: center;
+  align-items: baseline;
   cursor: pointer;
   background: $lightest;
   width: 100%;
   height: 38px;
   border: 2px solid $lightest;
   &__rank {
+    align-self: center;
     background: $primary;
     position: relative;
     padding: 0 2px;
@@ -80,26 +114,22 @@
     @extend .small2;
   }
   &__name {
-    padding-top: 1px;
     margin: 0 0.25rem;
     font-weight: 700;
     font-size: 1rem;
     white-space: nowrap;
   }
   &__position {
-    padding-top: 1px;
     margin: 0 0.25rem 0;
     text-transform: uppercase;
     font-size: 0.8rem;
   }
   &__team {
-    padding-top: 1px;
     text-transform: uppercase;
-    margin: 4.5px 0.25rem 0;
-    @extend .small3;
+    margin: 0 0.25rem 0;
+    @extend .small2;
   }
   &__pnts {
-    padding-top: 1px;
     margin: 0 0.25rem;
     font-weight: bold;
     @extend small;
@@ -108,15 +138,15 @@
 
 //Stats Table
 .stats-table {
-  padding-top: 1px;
+  align-self: center;
   caption {
     position: static;
   }
   td {
-    @extend .small3;
+    @extend .small2;
   }
   th {
-    @extend .small4;
+    @extend .small3;
   }
   td,
   th {
@@ -124,6 +154,9 @@
     font-weight: bold;
     line-height: 1.1;
     padding: 0 6px;
+  }
+  &.stats-table--hidden {
+    display: none;
   }
 }
 
@@ -134,7 +167,8 @@
 
 //Player Status
 .player-card__sentiment {
-  padding-top: 1px;
+  padding-top: 2px;
+  align-self: center;
   display: flex;
   align-items: center;
   margin: 0 0.25rem;

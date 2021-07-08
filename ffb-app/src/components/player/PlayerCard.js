@@ -1,7 +1,7 @@
 import React from "react";
 import { roundNumber } from "../../helpers.js";
 
-export function PlayerCard({ playerId, rank, team, position, player, overallPoints, stats, playerStatus, updatePlayerStatus, sentiment }) {
+export function PlayerCard({ playerId, rank, team, position, player, overallPoints, stats, playerStatus, updatePlayerStatus, sentiment, displayedStats }) {
   return (
     <li
       className={`player-card${playerStatus && playerStatus.drafted ? " player-card--drafted" : ""}${
@@ -15,7 +15,7 @@ export function PlayerCard({ playerId, rank, team, position, player, overallPoin
       {team && <div className="player-card__team">{team}</div>}
       {overallPoints && <div className="player-card__pnts">{roundNumber(overallPoints)}</div>}
       {stats && stats["PASSING ATT"] && stats["PASSING CMP"] && stats["PASSING INTS"] && stats["PASSING TDS"] && stats["PASSING YDS"] && (
-        <table className="stats-table stats-table--pass">
+        <table className={`stats-table stats-table--pass${displayedStats !== "pass" ? " stats-table--hidden" : ""}`}>
           <caption className="visually-hidden">Passing Stats</caption>
           <thead>
             <tr>
@@ -40,7 +40,7 @@ export function PlayerCard({ playerId, rank, team, position, player, overallPoin
         </table>
       )}
       {stats && stats["RUSHING ATT"] && stats["RUSHING TDS"] && stats["RUSHING YDS"] && (
-        <table className="stats-table stats-table--rush">
+        <table className={`stats-table stats-table--rush${displayedStats !== "rush" ? " stats-table--hidden" : ""}`}>
           <caption className="visually-hidden">Rushing Stats</caption>
           <thead>
             <tr>
@@ -61,7 +61,7 @@ export function PlayerCard({ playerId, rank, team, position, player, overallPoin
         </table>
       )}
       {stats && stats["RECEIVING REC"] && stats["RECEIVING TDS"] && stats["RECEIVING YDS"] && (
-        <table className="stats-table stats-table--rec">
+        <table className={`stats-table stats-table--rec${displayedStats !== "rec" ? " stats-table--hidden" : ""}`}>
           <caption className="visually-hidden">Receiving Stats</caption>
           <thead>
             <tr>
@@ -82,7 +82,7 @@ export function PlayerCard({ playerId, rank, team, position, player, overallPoin
         </table>
       )}
       {stats && stats["MISC FL"] && (
-        <table className="stats-table stats-table--rec">
+        <table className={`stats-table stats-table--rec${displayedStats !== "misc" ? " stats-table--hidden" : ""}`}>
           <caption className="visually-hidden">Miscellaneous Stats</caption>
           <thead>
             <tr>

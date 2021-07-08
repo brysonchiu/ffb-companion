@@ -1,9 +1,23 @@
 .header {
   display: flex;
+  align-content: space-between;
+  align-items: center;
+  flex-direction: row;
   height: 56px;
   border-bottom: 2px solid $darkest;
   grid-column: 1 / 3;
   grid-row: 1 / 2;
+  padding: 0 1rem;
+}
+
+.header__settings {
+  flex: 1 1 auto;
+}
+.header__widgets {
+  height: 38px;
+  display: flex;
+  flex-direction: row;
+  flex: 0 0 auto;
 }
 
 // Current Pick
@@ -35,5 +49,62 @@
   }
   &.current-pick__adjuster-down {
     grid-row: 2 / 3;
+  }
+}
+
+//Player Search
+.player-search__container {
+  height: 38px;
+  position: relative;
+  margin-right: 0.5rem;
+}
+.player-search {
+  height: 100%;
+  width: 230px;
+  background: none;
+  border: 2px solid $lightest;
+  border-radius: 4px;
+  z-index: 3;
+  color: $secondary;
+  padding: 0 28px 0 6px;
+  position: relative;
+  font-size: 1rem;
+  &[value="Search Player"],
+  &[value=""] {
+    width: 38px;
+  }
+  &:hover {
+    width: 230px;
+  }
+  &:focus {
+    width: 230px;
+    color: $primary;
+    border: 3px solid $lightest;
+    outline: none;
+  }
+}
+.icon-search {
+  position: absolute;
+  top: calc(50% - 6px);
+  right: 13px;
+  display: none;
+  &--active {
+    display: block;
+  }
+}
+.icon-close {
+  position: absolute;
+  top: calc(50% - 10px);
+  right: 9px;
+  padding: 5px;
+  width: 20px;
+  height: 20px;
+  z-index: 5;
+  border: 0;
+  background: none;
+  display: none;
+  cursor: pointer;
+  &--active {
+    display: block;
   }
 }

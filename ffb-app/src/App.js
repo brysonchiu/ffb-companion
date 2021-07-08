@@ -7,9 +7,10 @@ function App() {
   const [players, setPlayers] = useState({});
   const [ranks, setRanks] = useState([]);
   const [playerStatus, setPlayerStatus] = useState([]);
+  const [filter, setFilter] = useState("");
 
-  // Fetch for the stats json file
   useEffect(() => {
+    // Fetch for the stats json file
     const getStats = () => {
       fetch("stats.json", {
         headers: {
@@ -26,6 +27,9 @@ function App() {
         });
     };
     getStats();
+
+    //Set filter default value of "Search Player"
+    setFilter("Search Player");
   }, []);
 
   // Rank players and return an array of ranked players and players with ranking attribute
@@ -58,7 +62,7 @@ function App() {
     setPlayerStatus(playerStatus);
   };
 
-  //Update Sentiment
+  //Update Player Status
   const updatePlayerStatus = (playerId, statusCat, status = null) => {
     const updateStatus = { ...playerStatus };
     if (statusCat === "drafted") {
@@ -71,9 +75,9 @@ function App() {
 
   return (
     <div className="app app--light">
-      <Header />
-      <OverallList players={players} ranks={ranks} playerStatus={playerStatus} updatePlayerStatus={updatePlayerStatus} />
-      <PositionalLists players={players} ranks={ranks} playerStatus={playerStatus} updatePlayerStatus={updatePlayerStatus} />
+      <Header filter={filter} setFilter={setFilter} />
+      <OverallList players={players} ranks={ranks} playerStatus={playerStatus} updatePlayerStatus={updatePlayerStatus} filter={filter} />
+      <PositionalLists players={players} ranks={ranks} playerStatus={playerStatus} updatePlayerStatus={updatePlayerStatus} filter={filter} />
     </div>
   );
 }
