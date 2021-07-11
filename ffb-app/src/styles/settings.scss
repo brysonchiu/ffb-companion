@@ -1,0 +1,91 @@
+.settings {
+  display: none;
+  &--open {
+    display: block;
+  }
+  .settings__container {
+    padding: 1rem 1.5rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    max-width: 400px;
+    background: $light;
+    height: 100vh;
+    z-index: 50;
+    box-shadow: 2px 2px 4px rgba(71, 93, 91, 0.15);
+    display: flex;
+    flex-direction: column;
+  }
+  .settings__overlay {
+    background: $darkest;
+    opacity: 0.4;
+    z-index: 49;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .close-settings {
+    background: none;
+    border: none;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    .icon-close {
+      transform: scale(2);
+    }
+  }
+  .settings__title {
+    margin-top: 2rem;
+    border-bottom: 2px solid $primary;
+  }
+  .settings__category-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+  .settings__category-title {
+    font-size: 1rem;
+    margin-top: 2rem;
+    grid-column: 1 / 4;
+    margin-bottom: 0.5rem;
+  }
+  .settings__scoring-title {
+    margin-top: 1rem;
+    margin-bottom: 0.25rem;
+    grid-column: 1 / 4;
+    font-weight: normal;
+    @extend .small1;
+  }
+  .settings__category-title + .settings__scoring-title {
+    margin-top: 0;
+  }
+  .input-containter {
+    width: 100%;
+    position: relative;
+    background: $lightest;
+    border-radius: 4px;
+    height: 2rem;
+    border: 2px solid $lightest;
+    display: flex;
+    align-items: center;
+    padding: 2px 0.5rem;
+    label {
+      flex: 1 1 auto;
+      font-weight: bold;
+      @extend .small2;
+    }
+    input {
+      background: none;
+      border: none;
+      color: $primary;
+      outline: none;
+      width: 30px;
+      text-align: right;
+      flex: 0 0 auto;
+      @extend .small2;
+    }
+  }
+}

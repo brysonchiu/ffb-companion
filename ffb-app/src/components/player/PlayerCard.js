@@ -1,13 +1,34 @@
 import React from "react";
-import { roundNumber } from "../../helpers.js";
+import { roundNumber, checkPick } from "../../helpers.js";
 
-export function PlayerCard({ playerId, rank, team, position, player, overallPoints, stats, playerStatus, updatePlayerStatus, sentiment, displayedStats }) {
+export function PlayerCard({
+  playerId,
+  rank,
+  team,
+  position,
+  player,
+  overallPoints,
+  stats,
+  playerStatus,
+  updatePlayerStatus,
+  sentiment,
+  displayedStats,
+  currentPick,
+  setCurrentPick,
+}) {
   return (
     <li
       className={`player-card${playerStatus && playerStatus.drafted ? " player-card--drafted" : ""}${
         playerStatus && playerStatus.sentiment ? " player-card--" + playerStatus.sentiment : ""
       }`}
-      onClick={(e) => updatePlayerStatus(playerId, "drafted")}
+      onClick={() => {
+        if (playerStatus.drafted) {
+          setCurrentPick(checkPick(currentPick - 1));
+        } else {
+          setCurrentPick(checkPick(currentPick + 1));
+        }
+        updatePlayerStatus(playerId, "drafted");
+      }}
     >
       <div className="player-card__rank">{rank}</div>
       {position && <div className="player-card__position">{position}</div>}

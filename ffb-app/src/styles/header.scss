@@ -7,17 +7,30 @@
   border-bottom: 2px solid $darkest;
   grid-column: 1 / 3;
   grid-row: 1 / 2;
-  padding: 0 1rem;
+  padding: 0 1rem 0 1.5rem;
 }
 
 .header__settings {
   flex: 1 1 auto;
+  height: 38px;
 }
 .header__widgets {
   height: 38px;
   display: flex;
   flex-direction: row;
   flex: 0 0 auto;
+}
+
+//Hamburger
+.icon-humburger {
+  height: 38px;
+  padding: 0;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  cursor: pointer;
 }
 
 // Current Pick
@@ -27,28 +40,42 @@
   height: 38px;
   grid-template-columns: 53px 20px;
   grid-template-rows: 1fr 1fr;
+  margin-left: 0.25rem;
 }
 .current-pick__pick-container {
   background-color: $lightest;
+  height: 38px;
+  border-radius: 4px 0 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-column: 1 / 2;
+  grid-row: 1 / 3;
 }
 .current-pick__pick {
+  padding-top: 2px;
   color: $primary;
   @extend h4;
   font-weight: bold;
   text-align: center;
-  grid-column: 1 / 2;
-  grid-row: 1 / 3;
 }
 .current-pick__adjuster {
   background: $primary;
   color: $lightest;
   border: none;
   grid-column: 2 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
   &.current-pick__adjuster-up {
     grid-row: 1 / 2;
+    border-radius: 0 4px 0 0;
   }
   &.current-pick__adjuster-down {
     grid-row: 2 / 3;
+    border-radius: 0 0 4px 0;
   }
 }
 
@@ -56,7 +83,7 @@
 .player-search__container {
   height: 38px;
   position: relative;
-  margin-right: 0.5rem;
+  margin: 0 0.25rem;
 }
 .player-search {
   height: 100%;
@@ -92,7 +119,7 @@
     display: block;
   }
 }
-.icon-close {
+.icon-close-search {
   position: absolute;
   top: calc(50% - 10px);
   right: 9px;
@@ -107,4 +134,60 @@
   &--active {
     display: block;
   }
+}
+
+//User Picks
+.user-picks__container {
+  height: 38px;
+  background: $lightest;
+  border-radius: 4px;
+  margin: 0 0.25rem;
+  padding: 0.5rem;
+  font-weight: bold;
+  @extend .small2;
+  ul {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+  }
+  .user-pick__list-item {
+    display: flex;
+    align-items: center;
+    &--past {
+      color: $secondary;
+      path {
+        fill: $secondary;
+      }
+    }
+    &--error {
+      color: $hated;
+    }
+    &:last-of-type svg {
+      display: none;
+    }
+  }
+  .icon-right-arrow {
+    transform: scale(1.5);
+    padding: 0 3px;
+    width: 10px;
+  }
+  .user-pick {
+    padding: 0 1px 0 0;
+  }
+}
+.user-pick__list-item--past + .user-pick__list-item:not(.user-pick__list-item--past) .user-pick {
+  background: $primary;
+  border-radius: 8px;
+  color: $lightest;
+  padding: 0 5px;
+  margin-right: 1px;
+}
+.user-picks__container .user-pick__list-item.user-pick__list-item--current .user-pick {
+  background: $starred;
+  border-radius: 8px;
+  color: $primary;
+  padding: 0 5px;
+  margin-right: 1px;
 }

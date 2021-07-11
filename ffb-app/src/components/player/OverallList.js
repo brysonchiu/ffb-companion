@@ -1,6 +1,6 @@
 import { PlayerCard } from "./PlayerCard";
 
-export function OverallList({ players, ranks, playerStatus, updatePlayerStatus, filter }) {
+export function OverallList({ players, ranks, playerStatus, updatePlayerStatus, filter, currentPick, setCurrentPick }) {
   return (
     <div className="overall-list">
       <div className="list-head">
@@ -27,6 +27,8 @@ export function OverallList({ players, ranks, playerStatus, updatePlayerStatus, 
               playerStatus={playerStatus[playerId]}
               updatePlayerStatus={updatePlayerStatus}
               sentiment={true}
+              currentPick={currentPick}
+              setCurrentPick={setCurrentPick}
             />
           ))}
       </div>

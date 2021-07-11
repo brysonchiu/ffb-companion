@@ -24,7 +24,12 @@ export function PlayerSearch({ filter, setFilter }) {
         onChange={(e) => setFilter(e.target.value)}
       />
       <IconSearch active={filter === "Search Player" || filter === "" ? true : false} />
-      <IconClose active={filter !== "Search Player" && filter !== "" ? true : false} setFilter={setFilter} />
+      <button
+        className={`icon-close-search${filter !== "Search Player" && filter !== "" ? " icon-close-search--active" : ""}`}
+        onClick={() => setFilter("Search Player")}
+      >
+        <IconClose />
+      </button>
     </div>
   );
 }

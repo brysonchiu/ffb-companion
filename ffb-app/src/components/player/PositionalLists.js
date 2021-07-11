@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { PlayerCard } from "./PlayerCard";
-import { IconDownArrow } from "../icons/down-arrow.js";
+import { IconDownCaret } from "../icons/down-caret.js";
 
-export function PositionalLists({ players, ranks, playerStatus, updatePlayerStatus, filter }) {
+export function PositionalLists({ players, ranks, playerStatus, updatePlayerStatus, filter, currentPick, setCurrentPick }) {
   const [displayedStats, setDisplayedStats] = useState({});
 
   // set default displayed stats
@@ -35,7 +35,7 @@ export function PositionalLists({ players, ranks, playerStatus, updatePlayerStat
               <option value="rush">Rushing</option>
               <option value="misc">Misc</option>
             </select>
-            <IconDownArrow />
+            <IconDownCaret />
           </div>
         </div>
         <ul className="player-list">
@@ -59,6 +59,8 @@ export function PositionalLists({ players, ranks, playerStatus, updatePlayerStat
                 playerStatus={playerStatus[playerId]}
                 updatePlayerStatus={updatePlayerStatus}
                 displayedStats={displayedStats["QB"]}
+                currentPick={currentPick}
+                setCurrentPick={setCurrentPick}
               />
             ))}
         </ul>
@@ -75,7 +77,7 @@ export function PositionalLists({ players, ranks, playerStatus, updatePlayerStat
               <option value="rec">Receiving</option>
               <option value="misc">Misc</option>
             </select>
-            <IconDownArrow />
+            <IconDownCaret />
           </div>
         </div>
         <ul className="player-list">
@@ -99,6 +101,8 @@ export function PositionalLists({ players, ranks, playerStatus, updatePlayerStat
                 playerStatus={playerStatus[playerId]}
                 updatePlayerStatus={updatePlayerStatus}
                 displayedStats={displayedStats["RB"]}
+                currentPick={currentPick}
+                setCurrentPick={setCurrentPick}
               />
             ))}
         </ul>
@@ -115,7 +119,7 @@ export function PositionalLists({ players, ranks, playerStatus, updatePlayerStat
               <option value="rush">Rushing</option>
               <option value="misc">Misc</option>
             </select>
-            <IconDownArrow />
+            <IconDownCaret />
           </div>
         </div>
         <ul className="player-list">
@@ -139,6 +143,8 @@ export function PositionalLists({ players, ranks, playerStatus, updatePlayerStat
                 playerStatus={playerStatus[playerId]}
                 updatePlayerStatus={updatePlayerStatus}
                 displayedStats={displayedStats["WR"]}
+                currentPick={currentPick}
+                setCurrentPick={setCurrentPick}
               />
             ))}
         </ul>
@@ -154,7 +160,7 @@ export function PositionalLists({ players, ranks, playerStatus, updatePlayerStat
               <option value="rec">Receiving</option>
               <option value="misc">Misc</option>
             </select>
-            <IconDownArrow />
+            <IconDownCaret />
           </div>
         </div>
         <ul className="player-list">
@@ -178,6 +184,8 @@ export function PositionalLists({ players, ranks, playerStatus, updatePlayerStat
                 playerStatus={playerStatus[playerId]}
                 updatePlayerStatus={updatePlayerStatus}
                 displayedStats={displayedStats["TE"]}
+                currentPick={currentPick}
+                setCurrentPick={setCurrentPick}
               />
             ))}
         </ul>
