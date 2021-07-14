@@ -1,26 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { PlayerCard } from "./PlayerCard";
 import { IconDownCaret } from "../icons/down-caret.js";
 
 export function PositionalLists({ players, ranks, playerStatus, updatePlayerStatus, filter, currentPick, setCurrentPick }) {
-  const [displayedStats, setDisplayedStats] = useState({});
-
-  // set default displayed stats
-  useEffect(() => {
-    setDisplayedStats({
-      QB: "pass",
-      RB: "rush",
-      WR: "rec",
-      TE: "rec",
-    });
-  }, []);
+  const [displayedStats, setDisplayedStats] = useState({
+    QB: "pass",
+    RB: "rush",
+    WR: "rec",
+    TE: "rec",
+  });
 
   //Handle Stats Dropdown
   const handleStatsDropdown = (e) => {
     const newDisplayedStats = { ...displayedStats, [e.target.name]: e.target.value };
     setDisplayedStats(newDisplayedStats);
   };
-
   return (
     <div className="positional-list__container">
       <div className="positional-list positional-list__qb">
@@ -54,7 +48,6 @@ export function PositionalLists({ players, ranks, playerStatus, updatePlayerStat
                 playerId={playerId}
                 rank={players[playerId]["RANK"]}
                 player={players[playerId]["PLAYER"]}
-                points={players[playerId]["MISC FPTS"]}
                 stats={players[playerId]}
                 playerStatus={playerStatus[playerId]}
                 updatePlayerStatus={updatePlayerStatus}
@@ -96,7 +89,6 @@ export function PositionalLists({ players, ranks, playerStatus, updatePlayerStat
                 playerId={playerId}
                 rank={players[playerId]["RANK"]}
                 player={players[playerId]["PLAYER"]}
-                points={players[playerId]["MISC FPTS"]}
                 stats={players[playerId]}
                 playerStatus={playerStatus[playerId]}
                 updatePlayerStatus={updatePlayerStatus}
@@ -138,7 +130,6 @@ export function PositionalLists({ players, ranks, playerStatus, updatePlayerStat
                 playerId={playerId}
                 rank={players[playerId]["RANK"]}
                 player={players[playerId]["PLAYER"]}
-                points={players[playerId]["MISC FPTS"]}
                 stats={players[playerId]}
                 playerStatus={playerStatus[playerId]}
                 updatePlayerStatus={updatePlayerStatus}
@@ -179,7 +170,6 @@ export function PositionalLists({ players, ranks, playerStatus, updatePlayerStat
                 playerId={playerId}
                 rank={players[playerId]["RANK"]}
                 player={players[playerId]["PLAYER"]}
-                points={players[playerId]["MISC FPTS"]}
                 stats={players[playerId]}
                 playerStatus={playerStatus[playerId]}
                 updatePlayerStatus={updatePlayerStatus}

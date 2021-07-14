@@ -177,17 +177,13 @@
     padding: 0 1px 0 0;
   }
 }
-.user-pick__list-item--past + .user-pick__list-item:not(.user-pick__list-item--past) .user-pick {
-  background: $primary;
-  border-radius: 8px;
-  color: $lightest;
-  padding: 0 5px;
-  margin-right: 1px;
-}
+// .user-pick__list-item--past + .user-pick__list-item:not(.user-pick__list-item--past) .user-pick {
+//   background: $primary;
+//   border-radius: 8px;
+//   color: $lightest;
+//   padding: 0 5px;
+//   margin-right: 1px;
+// }
 .user-picks__container .user-pick__list-item.user-pick__list-item--current .user-pick {
-  background: $starred;
-  border-radius: 8px;
-  color: $primary;
-  padding: 0 5px;
-  margin-right: 1px;
+  color: $hated;
 }

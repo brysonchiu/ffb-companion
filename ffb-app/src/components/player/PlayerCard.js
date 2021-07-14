@@ -1,4 +1,3 @@
-import React from "react";
 import { roundNumber, checkPick } from "../../helpers.js";
 
 export function PlayerCard({
@@ -18,11 +17,11 @@ export function PlayerCard({
 }) {
   return (
     <li
-      className={`player-card${playerStatus && playerStatus.drafted ? " player-card--drafted" : ""}${
+      className={`player-card${playerStatus?.drafted ? " player-card--drafted" : ""}${
         playerStatus && playerStatus.sentiment ? " player-card--" + playerStatus.sentiment : ""
       }`}
       onClick={() => {
-        if (playerStatus.drafted) {
+        if (playerStatus?.drafted) {
           setCurrentPick(checkPick(currentPick - 1));
         } else {
           setCurrentPick(checkPick(currentPick + 1));
@@ -125,7 +124,7 @@ export function PlayerCard({
             className="player-card__button player-card__button--star"
             name="starred"
             onClick={(e) => {
-              if (!playerStatus.drafted) {
+              if (!playerStatus?.drafted) {
                 e.stopPropagation();
                 updatePlayerStatus(playerId, "sentiment", e.currentTarget.name);
               }
@@ -142,7 +141,7 @@ export function PlayerCard({
             className="player-card__button player-card__button--favorite"
             name="favorited"
             onClick={(e) => {
-              if (!playerStatus.drafted) {
+              if (!playerStatus?.drafted) {
                 e.stopPropagation();
                 updatePlayerStatus(playerId, "sentiment", e.currentTarget.name);
               }
@@ -159,7 +158,7 @@ export function PlayerCard({
             className="player-card__button player-card__button--hate"
             name="hated"
             onClick={(e) => {
-              if (!playerStatus.drafted) {
+              if (!playerStatus?.drafted) {
                 e.stopPropagation();
                 updatePlayerStatus(playerId, "sentiment", e.currentTarget.name);
               }

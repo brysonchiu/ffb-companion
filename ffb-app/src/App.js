@@ -7,7 +7,7 @@ import { Settings } from "./components/Settings.js";
 function App() {
   const [players, setPlayers] = useState({});
   const [ranks, setRanks] = useState([]);
-  const [playerStatus, setPlayerStatus] = useState([]);
+  const [playerStatus, setPlayerStatus] = useState({});
   const [filter, setFilter] = useState("Search Player");
   const [settings, setSettings] = useState({});
   const [currentPick, setCurrentPick] = useState(1);
@@ -26,7 +26,6 @@ function App() {
         })
         .then(function (json) {
           rankPlayers(json);
-          playStatusInit(json);
         });
     };
     getStats();
@@ -62,7 +61,61 @@ function App() {
         color_mode: "light",
       },
     });
-  }, []);
+  }, [setSettings]);
+
+  useEffect(() => {
+    // Calculate player's total points and update ranks
+    const updateTotalPoints = () => {
+      const updatePlayers = { ...players };
+      Object.keys(updatePlayers).map((playerId) => {
+        let totalPoints = 0;
+        updatePlayers[playerId]["MISC FL"] &&
+          updatePlayers[playerId]["MISC FL"] !== "" &&
+          (totalPoints += parseFloat(settings.scoring.misc_fum) * parseFloat(updatePlayers[playerId]["MISC FL"]));
+        updatePlayers[playerId]["PASSING CMP"] &&
+          updatePlayers[playerId]["PASSING CMP"] !== "" &&
+          (totalPoints += parseFloat(settings.scoring.pass_comp) * parseFloat(updatePlayers[playerId]["PASSING CMP"]));
+        updatePlayers[playerId]["PASSING INTS"] &&
+          updatePlayers[playerId]["PASSING INTS"] !== "" &&
+          (totalPoints += parseFloat(settings.scoring.pass_int) * parseFloat(updatePlayers[playerId]["PASSING INTS"]));
+        updatePlayers[playerId]["PASSING TDS"] &&
+          updatePlayers[playerId]["PASSING TDS"] !== "" &&
+          (totalPoints += parseFloat(settings.scoring.pass_td) * parseFloat(updatePlayers[playerId]["PASSING TDS"]));
+        updatePlayers[playerId]["PASSING YDS"] &&
+          updatePlayers[playerId]["PASSING YDS"] !== "" &&
+          (totalPoints += parseFloat(settings.scoring.pass_yrds) * parseFloat(updatePlayers[playerId]["PASSING YDS"]));
+        updatePlayers[playerId]["RECEIVING REC"] &&
+          updatePlayers[playerId]["RECEIVING REC"] !== "" &&
+          (totalPoints += parseFloat(settings.scoring.rec_rec) * parseFloat(updatePlayers[playerId]["RECEIVING REC"]));
+        updatePlayers[playerId]["RECEIVING TDS"] &&
+          updatePlayers[playerId]["RECEIVING TDS"] !== "" &&
+          (totalPoints += parseFloat(settings.scoring.rec_td) * parseFloat(updatePlayers[playerId]["RECEIVING TDS"]));
+        updatePlayers[playerId]["RECEIVING YDS"] &&
+          updatePlayers[playerId]["RECEIVING YDS"] !== "" &&
+          (totalPoints += parseFloat(settings.scoring.rec_yrds) * parseFloat(updatePlayers[playerId]["RECEIVING YDS"]));
+        updatePlayers[playerId]["RUSHING TDS"] &&
+          updatePlayers[playerId]["RUSHING TDS"] !== "" &&
+          (totalPoints += parseFloat(settings.scoring.rush_td) * parseFloat(updatePlayers[playerId]["RUSHING TDS"]));
+        updatePlayers[playerId]["RUSHING YDS"] &&
+          updatePlayers[playerId]["RUSHING YDS"] !== "" &&
+          (totalPoints += parseFloat(settings.scoring.rush_yrds) * parseFloat(updatePlayers[playerId]["RUSHING YDS"]));
+        return (updatePlayers[playerId]["MISC FPTS"] = totalPoints);
+      });
+      rankPlayers(updatePlayers);
+    };
+    updateTotalPoints();
+  }, [
+    settings.scoring?.misc_fum,
+    settings.scoring?.pass_comp,
+    settings.scoring?.pass_int,
+    settings.scoring?.pass_td,
+    settings.scoring?.pass_yrds,
+    settings.scoring?.rec_rec,
+    settings.scoring?.rec_td,
+    settings.scoring?.rec_yrds,
+    settings.scoring?.rush_td,
+    settings.scoring?.rush_yrds,
+  ]);
 
   // Rank players and return an array of ranked players and players with ranking attribute
   const rankPlayers = (playersObject) => {
@@ -82,27 +135,45 @@ function App() {
     setRanks(rankedIds);
   };
 
-  //Return an object with player status set to unpicked and no sentiment
-  const playStatusInit = (playersObject) => {
-    const playerStatus = {};
-    Object.keys(playersObject).map((playerId) => {
-      return (playerStatus[playerId] = {
-        drafted: false,
-        sentiment: null,
-      });
-    });
-    setPlayerStatus(playerStatus);
-  };
-
   //Update Player Status
   const updatePlayerStatus = (playerId, statusCat, status = null) => {
-    const updateStatus = { ...playerStatus };
     if (statusCat === "drafted") {
-      updateStatus[playerId][statusCat] ? (updateStatus[playerId][statusCat] = false) : (updateStatus[playerId][statusCat] = true);
+      if (playerStatus[playerId]?.[statusCat]) {
+        setPlayerStatus({
+          ...playerStatus,
+          [playerId]: {
+            ...playerStatus[playerId],
+            [statusCat]: false,
+          },
+        });
+      } else {
+        setPlayerStatus({
+          ...playerStatus,
+          [playerId]: {
+            ...playerStatus[playerId],
+            [statusCat]: true,
+          },
+        });
+      }
     } else if (statusCat === "sentiment") {
-      updateStatus[playerId][statusCat] !== status ? (updateStatus[playerId][statusCat] = status) : (updateStatus[playerId][statusCat] = null);
+      if (playerStatus[playerId]?.[statusCat] !== status) {
+        setPlayerStatus({
+          ...playerStatus,
+          [playerId]: {
+            ...playerStatus[playerId],
+            [statusCat]: status,
+          },
+        });
+      } else {
+        setPlayerStatus({
+          ...playerStatus,
+          [playerId]: {
+            ...playerStatus[playerId],
+            [statusCat]: null,
+          },
+        });
+      }
     }
-    setPlayerStatus(updateStatus);
   };
 
   return (
