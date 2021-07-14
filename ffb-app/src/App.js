@@ -8,7 +8,7 @@ function App() {
   const [players, setPlayers] = useState({});
   const [ranks, setRanks] = useState([]);
   const [playerStatus, setPlayerStatus] = useState({});
-  const [filter, setFilter] = useState("Search Player");
+  const [filter, setFilter] = useState("");
   const [settings, setSettings] = useState({});
   const [currentPick, setCurrentPick] = useState(1);
 

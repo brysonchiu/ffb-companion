@@ -109,6 +109,9 @@
     border: 3px solid $lightest;
     outline: none;
   }
+  &::placeholder {
+    color: $secondary;
+  }
 }
 .icon-search {
   position: absolute;
