@@ -33,6 +33,7 @@
     width: 30px;
     height: 30px;
     cursor: pointer;
+    padding: 0;
     .icon-close {
       transform: scale(2);
     }
@@ -67,17 +68,21 @@
     position: relative;
     background: $lightest;
     border-radius: 4px;
-    height: 2rem;
     border: 2px solid $lightest;
     display: flex;
     align-items: center;
-    padding: 2px 0.5rem;
     label {
+      height: calc(2rem - 2px);
+      padding: 2px 0 2px 0.5rem;
       flex: 1 1 auto;
       font-weight: bold;
+      display: flex;
+      align-items: center;
       @extend .small2;
     }
     input {
+      padding: 2px 0.5rem 2px 0;
+      height: calc(2rem - 2px);
       background: none;
       border: none;
       color: $primary;

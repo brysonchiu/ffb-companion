@@ -7,6 +7,7 @@ export function PlayerCard({
   position,
   player,
   overallPoints,
+  playerTotalPoints,
   stats,
   playerStatus,
   updatePlayerStatus,
@@ -33,7 +34,7 @@ export function PlayerCard({
       {position && <div className="player-card__position">{position}</div>}
       <div className="player-card__name">{player}</div>
       {team && <div className="player-card__team">{team}</div>}
-      {overallPoints && <div className="player-card__pnts">{roundNumber(overallPoints)}</div>}
+      {overallPoints !== undefined && <div className="player-card__pnts">{roundNumber(overallPoints)}</div>}
       {stats && stats["PASSING ATT"] && stats["PASSING CMP"] && stats["PASSING INTS"] && stats["PASSING TDS"] && stats["PASSING YDS"] && (
         <table className={`stats-table stats-table--pass${displayedStats !== "pass" ? " stats-table--hidden" : ""}`}>
           <caption className="visually-hidden">Passing Stats</caption>
@@ -49,7 +50,7 @@ export function PlayerCard({
           </thead>
           <tbody>
             <tr>
-              <td>{roundNumber(stats["MISC FPTS"])}</td>
+              <td>{roundNumber(playerTotalPoints)}</td>
               <td>{roundNumber(stats["PASSING ATT"])}</td>
               <td>{roundNumber(stats["PASSING CMP"])}</td>
               <td>{roundNumber(stats["PASSING YDS"])}</td>
@@ -72,7 +73,7 @@ export function PlayerCard({
           </thead>
           <tbody>
             <tr>
-              <td>{roundNumber(stats["MISC FPTS"])}</td>
+              <td>{roundNumber(playerTotalPoints)}</td>
               <td>{roundNumber(stats["RUSHING ATT"])}</td>
               <td>{roundNumber(stats["RUSHING YDS"])}</td>
               <td>{roundNumber(stats["RUSHING TDS"])}</td>
@@ -93,7 +94,7 @@ export function PlayerCard({
           </thead>
           <tbody>
             <tr>
-              <td>{roundNumber(stats["MISC FPTS"])}</td>
+              <td>{roundNumber(playerTotalPoints)}</td>
               <td>{roundNumber(stats["RECEIVING REC"])}</td>
               <td>{roundNumber(stats["RECEIVING YDS"])}</td>
               <td>{roundNumber(stats["RECEIVING TDS"])}</td>
@@ -112,7 +113,7 @@ export function PlayerCard({
           </thead>
           <tbody>
             <tr>
-              <td>{roundNumber(stats["MISC FPTS"])}</td>
+              <td>{roundNumber(playerTotalPoints)}</td>
               <td>{roundNumber(stats["MISC FL"])}</td>
             </tr>
           </tbody>

@@ -3,15 +3,17 @@ import { Header } from "./components/Header.js";
 import { OverallList } from "./components/player/OverallList.js";
 import { PositionalLists } from "./components/player/PositionalLists.js";
 import { Settings } from "./components/Settings.js";
+import { parseStringToFloat } from "./helpers.js";
 
 function App() {
   const [players, setPlayers] = useState({});
-  const [ranks, setRanks] = useState([]);
   const [playerStatus, setPlayerStatus] = useState({});
   const [filter, setFilter] = useState("");
   const [settings, setSettings] = useState({});
   const [currentPick, setCurrentPick] = useState(1);
+  const [playersTotalPoints, setPlayersTotalPoints] = useState([]);
 
+  //init player stats and set default settings
   useEffect(() => {
     // Fetch for the stats json file
     const getStats = () => {
@@ -25,7 +27,7 @@ function App() {
           return response.json();
         })
         .then(function (json) {
-          rankPlayers(json);
+          setPlayers(json);
         });
     };
     getStats();
@@ -61,49 +63,33 @@ function App() {
         color_mode: "light",
       },
     });
-  }, [setSettings]);
+  }, [setSettings, setPlayers]);
 
+  // Calculate players' total points and rank (sort)
   useEffect(() => {
-    // Calculate player's total points and update ranks
-    const updateTotalPoints = () => {
-      const updatePlayers = { ...players };
-      Object.keys(updatePlayers).map((playerId) => {
+    const updateTotalPoints = (players) => {
+      const fantasyPoints = [];
+      Object.keys(players).map((playerId) => {
         let totalPoints = 0;
-        updatePlayers[playerId]["MISC FL"] &&
-          updatePlayers[playerId]["MISC FL"] !== "" &&
-          (totalPoints += parseFloat(settings.scoring.misc_fum) * parseFloat(updatePlayers[playerId]["MISC FL"]));
-        updatePlayers[playerId]["PASSING CMP"] &&
-          updatePlayers[playerId]["PASSING CMP"] !== "" &&
-          (totalPoints += parseFloat(settings.scoring.pass_comp) * parseFloat(updatePlayers[playerId]["PASSING CMP"]));
-        updatePlayers[playerId]["PASSING INTS"] &&
-          updatePlayers[playerId]["PASSING INTS"] !== "" &&
-          (totalPoints += parseFloat(settings.scoring.pass_int) * parseFloat(updatePlayers[playerId]["PASSING INTS"]));
-        updatePlayers[playerId]["PASSING TDS"] &&
-          updatePlayers[playerId]["PASSING TDS"] !== "" &&
-          (totalPoints += parseFloat(settings.scoring.pass_td) * parseFloat(updatePlayers[playerId]["PASSING TDS"]));
-        updatePlayers[playerId]["PASSING YDS"] &&
-          updatePlayers[playerId]["PASSING YDS"] !== "" &&
-          (totalPoints += parseFloat(settings.scoring.pass_yrds) * parseFloat(updatePlayers[playerId]["PASSING YDS"]));
-        updatePlayers[playerId]["RECEIVING REC"] &&
-          updatePlayers[playerId]["RECEIVING REC"] !== "" &&
-          (totalPoints += parseFloat(settings.scoring.rec_rec) * parseFloat(updatePlayers[playerId]["RECEIVING REC"]));
-        updatePlayers[playerId]["RECEIVING TDS"] &&
-          updatePlayers[playerId]["RECEIVING TDS"] !== "" &&
-          (totalPoints += parseFloat(settings.scoring.rec_td) * parseFloat(updatePlayers[playerId]["RECEIVING TDS"]));
-        updatePlayers[playerId]["RECEIVING YDS"] &&
-          updatePlayers[playerId]["RECEIVING YDS"] !== "" &&
-          (totalPoints += parseFloat(settings.scoring.rec_yrds) * parseFloat(updatePlayers[playerId]["RECEIVING YDS"]));
-        updatePlayers[playerId]["RUSHING TDS"] &&
-          updatePlayers[playerId]["RUSHING TDS"] !== "" &&
-          (totalPoints += parseFloat(settings.scoring.rush_td) * parseFloat(updatePlayers[playerId]["RUSHING TDS"]));
-        updatePlayers[playerId]["RUSHING YDS"] &&
-          updatePlayers[playerId]["RUSHING YDS"] !== "" &&
-          (totalPoints += parseFloat(settings.scoring.rush_yrds) * parseFloat(updatePlayers[playerId]["RUSHING YDS"]));
-        return (updatePlayers[playerId]["MISC FPTS"] = totalPoints);
+        totalPoints += parseStringToFloat(settings.scoring.misc_fum) * parseStringToFloat(players[playerId]["MISC FL"]);
+        totalPoints += parseStringToFloat(settings.scoring.pass_comp) * parseStringToFloat(players[playerId]["PASSING CMP"]);
+        totalPoints += parseStringToFloat(settings.scoring.pass_int) * parseStringToFloat(players[playerId]["PASSING INTS"]);
+        totalPoints += parseStringToFloat(settings.scoring.pass_td) * parseStringToFloat(players[playerId]["PASSING TDS"]);
+        totalPoints += parseStringToFloat(settings.scoring.pass_yrds) * parseStringToFloat(players[playerId]["PASSING YDS"]);
+        totalPoints += parseStringToFloat(settings.scoring.rec_rec) * parseStringToFloat(players[playerId]["RECEIVING REC"]);
+        totalPoints += parseStringToFloat(settings.scoring.rec_td) * parseStringToFloat(players[playerId]["RECEIVING TDS"]);
+        totalPoints += parseStringToFloat(settings.scoring.rec_yrds) * parseStringToFloat(players[playerId]["RECEIVING YDS"]);
+        totalPoints += parseStringToFloat(settings.scoring.rush_td) * parseStringToFloat(players[playerId]["RUSHING TDS"]);
+        totalPoints += parseStringToFloat(settings.scoring.rush_yrds) * parseStringToFloat(players[playerId]["RUSHING YDS"]);
+        return fantasyPoints.push([playerId, totalPoints]);
       });
-      rankPlayers(updatePlayers);
+      //Rank, aka sort players by points
+      fantasyPoints.sort((playerA, playerB) => {
+        return playerB[1] - playerA[1];
+      });
+      setPlayersTotalPoints(fantasyPoints);
     };
-    updateTotalPoints();
+    updateTotalPoints(players);
   }, [
     settings.scoring?.misc_fum,
     settings.scoring?.pass_comp,
@@ -115,25 +101,8 @@ function App() {
     settings.scoring?.rec_yrds,
     settings.scoring?.rush_td,
     settings.scoring?.rush_yrds,
+    players,
   ]);
-
-  // Rank players and return an array of ranked players and players with ranking attribute
-  const rankPlayers = (playersObject) => {
-    const rankedPlayers = [];
-    const rankedIds = [];
-    for (var playerId in playersObject) {
-      rankedPlayers.push([playerId, playersObject[playerId]["MISC FPTS"]]);
-    }
-    rankedPlayers.sort((a, b) => {
-      return b[1] - a[1];
-    });
-    rankedPlayers.forEach((player, index) => {
-      playersObject[player[0]]["RANK"] = index + 1;
-      rankedIds.push(player[0]);
-    });
-    setPlayers(playersObject);
-    setRanks(rankedIds);
-  };
 
   //Update Player Status
   const updatePlayerStatus = (playerId, statusCat, status = null) => {
@@ -181,7 +150,7 @@ function App() {
       <Header filter={filter} setFilter={setFilter} settings={settings} setSettings={setSettings} currentPick={currentPick} setCurrentPick={setCurrentPick} />
       <OverallList
         players={players}
-        ranks={ranks}
+        playersTotalPoints={playersTotalPoints}
         playerStatus={playerStatus}
         updatePlayerStatus={updatePlayerStatus}
         filter={filter}
@@ -191,7 +160,7 @@ function App() {
       />
       <PositionalLists
         players={players}
-        ranks={ranks}
+        playersTotalPoints={playersTotalPoints}
         playerStatus={playerStatus}
         updatePlayerStatus={updatePlayerStatus}
         filter={filter}

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { PlayerCard } from "./PlayerCard";
 import { IconDownCaret } from "../icons/down-caret.js";
 
-export function PositionalLists({ players, ranks, playerStatus, updatePlayerStatus, filter, currentPick, setCurrentPick }) {
+export function PositionalLists({ players, playersTotalPoints, playerStatus, updatePlayerStatus, filter, currentPick, setCurrentPick }) {
   const [displayedStats, setDisplayedStats] = useState({
     QB: "pass",
     RB: "rush",
@@ -33,23 +33,24 @@ export function PositionalLists({ players, ranks, playerStatus, updatePlayerStat
           </div>
         </div>
         <ul className="player-list">
-          {ranks
-            .filter((playerId) => players[playerId]["POSITION"] === "QB")
-            .filter((playerId) => {
+          {playersTotalPoints
+            .filter((obj) => players[obj[0]]["POSITION"] === "QB")
+            .filter((obj) => {
               if (filter.toLowerCase() !== "search player" && filter !== "") {
-                return players[playerId]["PLAYER"].toLowerCase().includes(filter.toLowerCase());
+                return players[obj[0]]["PLAYER"].toLowerCase().includes(filter.toLowerCase());
               } else {
                 return true;
               }
             })
-            .map((playerId, index) => (
+            .map((obj) => (
               <PlayerCard
-                key={playerId}
-                playerId={playerId}
-                rank={players[playerId]["RANK"]}
-                player={players[playerId]["PLAYER"]}
-                stats={players[playerId]}
-                playerStatus={playerStatus[playerId]}
+                key={obj[0]}
+                playerId={obj[0]}
+                rank={playersTotalPoints.findIndex((el) => el[0] === obj[0]) + 1}
+                playerTotalPoints={obj[1]}
+                player={players[obj[0]]["PLAYER"]}
+                stats={players[obj[0]]}
+                playerStatus={playerStatus[obj[0]]}
                 updatePlayerStatus={updatePlayerStatus}
                 displayedStats={displayedStats["QB"]}
                 currentPick={currentPick}
@@ -74,23 +75,24 @@ export function PositionalLists({ players, ranks, playerStatus, updatePlayerStat
           </div>
         </div>
         <ul className="player-list">
-          {ranks
-            .filter((playerId) => players[playerId]["POSITION"] === "RB")
-            .filter((playerId) => {
+          {playersTotalPoints
+            .filter((obj) => players[obj[0]]["POSITION"] === "RB")
+            .filter((obj) => {
               if (filter.toLowerCase() !== "search player" && filter !== "") {
-                return players[playerId]["PLAYER"].toLowerCase().includes(filter.toLowerCase());
+                return players[obj[0]]["PLAYER"].toLowerCase().includes(filter.toLowerCase());
               } else {
                 return true;
               }
             })
-            .map((playerId, index) => (
+            .map((obj) => (
               <PlayerCard
-                key={playerId}
-                playerId={playerId}
-                rank={players[playerId]["RANK"]}
-                player={players[playerId]["PLAYER"]}
-                stats={players[playerId]}
-                playerStatus={playerStatus[playerId]}
+                key={obj[0]}
+                playerId={obj[0]}
+                rank={playersTotalPoints.findIndex((el) => el[0] === obj[0]) + 1}
+                playerTotalPoints={obj[1]}
+                player={players[obj[0]]["PLAYER"]}
+                stats={players[obj[0]]}
+                playerStatus={playerStatus[obj[0]]}
                 updatePlayerStatus={updatePlayerStatus}
                 displayedStats={displayedStats["RB"]}
                 currentPick={currentPick}
@@ -115,23 +117,24 @@ export function PositionalLists({ players, ranks, playerStatus, updatePlayerStat
           </div>
         </div>
         <ul className="player-list">
-          {ranks
-            .filter((playerId) => players[playerId]["POSITION"] === "WR")
-            .filter((playerId) => {
+          {playersTotalPoints
+            .filter((obj) => players[obj[0]]["POSITION"] === "WR")
+            .filter((obj) => {
               if (filter.toLowerCase() !== "search player" && filter !== "") {
-                return players[playerId]["PLAYER"].toLowerCase().includes(filter.toLowerCase());
+                return players[obj[0]]["PLAYER"].toLowerCase().includes(filter.toLowerCase());
               } else {
                 return true;
               }
             })
-            .map((playerId, index) => (
+            .map((obj) => (
               <PlayerCard
-                key={playerId}
-                playerId={playerId}
-                rank={players[playerId]["RANK"]}
-                player={players[playerId]["PLAYER"]}
-                stats={players[playerId]}
-                playerStatus={playerStatus[playerId]}
+                key={obj[0]}
+                playerId={obj[0]}
+                rank={playersTotalPoints.findIndex((el) => el[0] === obj[0]) + 1}
+                playerTotalPoints={obj[1]}
+                player={players[obj[0]]["PLAYER"]}
+                stats={players[obj[0]]}
+                playerStatus={playerStatus[obj[0]]}
                 updatePlayerStatus={updatePlayerStatus}
                 displayedStats={displayedStats["WR"]}
                 currentPick={currentPick}
@@ -155,23 +158,24 @@ export function PositionalLists({ players, ranks, playerStatus, updatePlayerStat
           </div>
         </div>
         <ul className="player-list">
-          {ranks
-            .filter((playerId) => players[playerId]["POSITION"] === "TE")
-            .filter((playerId) => {
+          {playersTotalPoints
+            .filter((obj) => players[obj[0]]["POSITION"] === "TE")
+            .filter((obj) => {
               if (filter.toLowerCase() !== "search player" && filter !== "") {
-                return players[playerId]["PLAYER"].toLowerCase().includes(filter.toLowerCase());
+                return players[obj[0]]["PLAYER"].toLowerCase().includes(filter.toLowerCase());
               } else {
                 return true;
               }
             })
-            .map((playerId, index) => (
+            .map((obj) => (
               <PlayerCard
-                key={playerId}
-                playerId={playerId}
-                rank={players[playerId]["RANK"]}
-                player={players[playerId]["PLAYER"]}
-                stats={players[playerId]}
-                playerStatus={playerStatus[playerId]}
+                key={obj[0]}
+                playerId={obj[0]}
+                rank={playersTotalPoints.findIndex((el) => el[0] === obj[0]) + 1}
+                playerTotalPoints={obj[1]}
+                player={players[obj[0]]["PLAYER"]}
+                stats={players[obj[0]]}
+                playerStatus={playerStatus[obj[0]]}
                 updatePlayerStatus={updatePlayerStatus}
                 displayedStats={displayedStats["TE"]}
                 currentPick={currentPick}

@@ -162,6 +162,15 @@
   &.stats-table--hidden {
     display: none;
   }
+  &--pass {
+    min-width: 225px;
+  }
+  &--rush {
+    min-width: 155px;
+  }
+  &--rec {
+    min-width: 155px;
+  }
 }
 
 //Player Hover

@@ -23,7 +23,7 @@ function getStats() {
             const playerId = $(this).attr("class").match(/\d+/g)[0];
             const td = $(this).find("td");
             const statsObj = {};
-            for (i = 0; i < td.length; i++) {
+            for (i = 0; i < td.length - 1; i++) {
               if (i == 0) {
                 statsObj.PLAYER = td[i].children[0].children[0].data;
                 statsObj.POSITION = urlPosisiton.toUpperCase();
@@ -102,7 +102,9 @@ function getStats() {
               } else {
                 heading = statsTypeHeaders[i].headingStatsTypeCell + " " + attrHeaders[n].headingAttrCell;
               }
-              headersTable.push(heading);
+              if (heading !== "MISC FPTS") {
+                headersTable.push(heading);
+              }
             }
           }
           return headersTable;
