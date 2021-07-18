@@ -22,3 +22,15 @@ export function roundNumber(num) {
 export function checkPick(currentPick) {
   return currentPick < 1 ? 1 : currentPick;
 }
+
+//Total Roster Size
+export function rosterSize(settings) {
+  return (
+    parseStringToFloat(settings.roster?.qb) +
+    parseStringToFloat(settings.roster?.rb) +
+    parseStringToFloat(settings.roster?.wr) +
+    parseStringToFloat(settings.roster?.te) +
+    parseStringToFloat(settings.roster?.flex) +
+    parseStringToFloat(settings.roster?.bench)
+  );
+}

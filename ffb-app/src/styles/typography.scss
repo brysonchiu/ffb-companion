@@ -5,8 +5,11 @@ h3,
 h4,
 h5,
 h6 {
-  color: $heading-colors;
+  color: $primary;
   margin: 0;
+  .app--dark & {
+    color: $lightest;
+  }
 }
 h1 {
   font-size: 2.074rem;

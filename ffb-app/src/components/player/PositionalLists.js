@@ -2,7 +2,7 @@ import { useState } from "react";
 import { PlayerCard } from "./PlayerCard";
 import { IconDownCaret } from "../icons/down-caret.js";
 
-export function PositionalLists({ players, playersTotalPoints, playerStatus, updatePlayerStatus, filter, currentPick, setCurrentPick }) {
+export function PositionalLists({ players, playersTotalPoints, sentimentStatus, draftStatus, updateDraftStatus, filter, currentPick, setCurrentPick }) {
   const [displayedStats, setDisplayedStats] = useState({
     QB: "pass",
     RB: "rush",
@@ -50,8 +50,9 @@ export function PositionalLists({ players, playersTotalPoints, playerStatus, upd
                 playerTotalPoints={obj[1]}
                 player={players[obj[0]]["PLAYER"]}
                 stats={players[obj[0]]}
-                playerStatus={playerStatus[obj[0]]}
-                updatePlayerStatus={updatePlayerStatus}
+                sentimentStatus={sentimentStatus[obj[0]]}
+                draftStatus={draftStatus[obj[0]]}
+                updateDraftStatus={updateDraftStatus}
                 displayedStats={displayedStats["QB"]}
                 currentPick={currentPick}
                 setCurrentPick={setCurrentPick}
@@ -92,8 +93,9 @@ export function PositionalLists({ players, playersTotalPoints, playerStatus, upd
                 playerTotalPoints={obj[1]}
                 player={players[obj[0]]["PLAYER"]}
                 stats={players[obj[0]]}
-                playerStatus={playerStatus[obj[0]]}
-                updatePlayerStatus={updatePlayerStatus}
+                sentimentStatus={sentimentStatus[obj[0]]}
+                draftStatus={draftStatus[obj[0]]}
+                updateDraftStatus={updateDraftStatus}
                 displayedStats={displayedStats["RB"]}
                 currentPick={currentPick}
                 setCurrentPick={setCurrentPick}
@@ -134,8 +136,9 @@ export function PositionalLists({ players, playersTotalPoints, playerStatus, upd
                 playerTotalPoints={obj[1]}
                 player={players[obj[0]]["PLAYER"]}
                 stats={players[obj[0]]}
-                playerStatus={playerStatus[obj[0]]}
-                updatePlayerStatus={updatePlayerStatus}
+                sentimentStatus={sentimentStatus[obj[0]]}
+                draftStatus={draftStatus[obj[0]]}
+                updateDraftStatus={updateDraftStatus}
                 displayedStats={displayedStats["WR"]}
                 currentPick={currentPick}
                 setCurrentPick={setCurrentPick}
@@ -175,8 +178,9 @@ export function PositionalLists({ players, playersTotalPoints, playerStatus, upd
                 playerTotalPoints={obj[1]}
                 player={players[obj[0]]["PLAYER"]}
                 stats={players[obj[0]]}
-                playerStatus={playerStatus[obj[0]]}
-                updatePlayerStatus={updatePlayerStatus}
+                sentimentStatus={sentimentStatus[obj[0]]}
+                draftStatus={draftStatus[obj[0]]}
+                updateDraftStatus={updateDraftStatus}
                 displayedStats={displayedStats["TE"]}
                 currentPick={currentPick}
                 setCurrentPick={setCurrentPick}

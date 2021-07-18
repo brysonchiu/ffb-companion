@@ -7,7 +7,8 @@ import { parseStringToFloat } from "./helpers.js";
 
 function App() {
   const [players, setPlayers] = useState({});
-  const [playerStatus, setPlayerStatus] = useState({});
+  const [draftStatus, setDraftStatus] = useState({});
+  const [sentimentStatus, setSentimentStatus] = useState({});
   const [filter, setFilter] = useState("");
   const [settings, setSettings] = useState({});
   const [currentPick, setCurrentPick] = useState(1);
@@ -31,6 +32,15 @@ function App() {
         });
     };
     getStats();
+
+    //Get sentimet status from local storage
+    if (localStorage.getItem("sentimentStatus")) setSentimentStatus(JSON.parse(localStorage.getItem("sentimentStatus")));
+
+    //Get draft status from local storage
+    if (localStorage.getItem("draftStatus")) setDraftStatus(JSON.parse(localStorage.getItem("draftStatus")));
+
+    //Get current pick from local storage
+    if (localStorage.getItem("currentPick")) setCurrentPick(localStorage.getItem("currentPick"));
 
     //Set default settings
     setSettings({
@@ -104,55 +114,57 @@ function App() {
     players,
   ]);
 
-  //Update Player Status
-  const updatePlayerStatus = (playerId, statusCat, status = null) => {
-    if (statusCat === "drafted") {
-      if (playerStatus[playerId]?.[statusCat]) {
-        setPlayerStatus({
-          ...playerStatus,
-          [playerId]: {
-            ...playerStatus[playerId],
-            [statusCat]: false,
-          },
-        });
-      } else {
-        setPlayerStatus({
-          ...playerStatus,
-          [playerId]: {
-            ...playerStatus[playerId],
-            [statusCat]: true,
-          },
-        });
-      }
-    } else if (statusCat === "sentiment") {
-      if (playerStatus[playerId]?.[statusCat] !== status) {
-        setPlayerStatus({
-          ...playerStatus,
-          [playerId]: {
-            ...playerStatus[playerId],
-            [statusCat]: status,
-          },
-        });
-      } else {
-        setPlayerStatus({
-          ...playerStatus,
-          [playerId]: {
-            ...playerStatus[playerId],
-            [statusCat]: null,
-          },
-        });
-      }
+  //Update Draft Status
+  const updateDraftStatus = (playerId) => {
+    if (draftStatus[playerId]) {
+      delete draftStatus[playerId];
+      setDraftStatus({
+        ...draftStatus,
+      });
+    } else {
+      setDraftStatus({
+        ...draftStatus,
+        [playerId]: true,
+      });
     }
   };
+  useEffect(() => {
+    localStorage.setItem("draftStatus", JSON.stringify(draftStatus));
+  }, [draftStatus]);
+
+  //Update Sentiment Status
+  const updateSentimentStatus = (playerId, status = null) => {
+    if (sentimentStatus[playerId] !== status) {
+      setSentimentStatus({
+        ...sentimentStatus,
+        [playerId]: status,
+      });
+    } else {
+      delete sentimentStatus[playerId];
+      setSentimentStatus({
+        ...sentimentStatus,
+      });
+    }
+  };
+  useEffect(() => {
+    localStorage.setItem("sentimentStatus", JSON.stringify(sentimentStatus));
+  }, [sentimentStatus]);
+
+  //Set current pick to local storage
+  useEffect(() => {
+    localStorage.setItem("currentPick", currentPick);
+  }, [currentPick]);
 
   return (
-    <div className="app app--light">
+    <div className={`app app--${settings.misc?.color_mode}`}>
       <Header filter={filter} setFilter={setFilter} settings={settings} setSettings={setSettings} currentPick={currentPick} setCurrentPick={setCurrentPick} />
       <OverallList
         players={players}
         playersTotalPoints={playersTotalPoints}
-        playerStatus={playerStatus}
-        updatePlayerStatus={updatePlayerStatus}
+        sentimentStatus={sentimentStatus}
+        updateSentimentStatus={updateSentimentStatus}
+        draftStatus={draftStatus}
+        updateDraftStatus={updateDraftStatus}
         filter={filter}
         settings={settings}
         currentPick={currentPick}
@@ -161,14 +173,20 @@ function App() {
       <PositionalLists
         players={players}
         playersTotalPoints={playersTotalPoints}
-        playerStatus={playerStatus}
-        updatePlayerStatus={updatePlayerStatus}
+        sentimentStatus={sentimentStatus}
+        draftStatus={draftStatus}
+        updateDraftStatus={updateDraftStatus}
         filter={filter}
-        settings={settings}
         currentPick={currentPick}
         setCurrentPick={setCurrentPick}
       />
-      <Settings settings={settings} setSettings={setSettings} />
+      <Settings
+        settings={settings}
+        setSettings={setSettings}
+        setDraftStatus={setDraftStatus}
+        setSentimentStatus={setSentimentStatus}
+        setCurrentPick={setCurrentPick}
+      />
     </div>
   );
 }

@@ -7,6 +7,9 @@
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  .app--dark & {
+    border-color: $lightest;
+  }
   .player-list {
     padding: 0 1.5rem 1rem;
     overflow-y: scroll;
@@ -49,6 +52,9 @@
   align-items: baseline;
   justify-content: space-between;
   position: relative;
+  .app--dark & {
+    border-color: $lightest;
+  }
   .list-heading {
     margin-right: 1rem;
   }
@@ -57,6 +63,9 @@
       position: absolute;
       right: 0;
       top: 53%;
+      .app--dark & path {
+        fill: $lightest;
+      }
     }
   }
   select.stats-dropdrown::-ms-expand {
@@ -76,6 +85,9 @@
     z-index: 2;
     position: relative;
     outline: none;
+    .app--dark & {
+      color: $lightest;
+    }
   }
 }
 
@@ -87,6 +99,14 @@
 }
 .positional-list:last-of-type .player-list {
   padding-right: 1rem;
+}
+.player-list__round-title {
+  font-size: 1rem;
+  margin: 1.875rem 0 0.5rem;
+}
+.player-list__round-list {
+  padding: 0;
+  margin: 0.5rem 0 1rem;
 }
 
 //Player Card
@@ -174,8 +194,30 @@
 }
 
 //Player Hover
-.player-card:hover:not(.player-card--picked):not(.player-card--hate):not(.player-card--favorite):not(.player-card--star) {
+.player-card:hover:not(.player-card--drafted):not(.player-card--hate):not(.player-card--favorite):not(.player-card--star) {
   border: 2px solid $primary;
+  .app--dark & {
+    border-color: $secondary;
+    background: $secondary;
+    .player-card__rank {
+      color: $secondary;
+    }
+  }
+}
+.player-card.player-card--drafted:hover {
+  .app--dark & {
+    border-color: $secondary;
+    background: $secondary;
+    .player-card__rank {
+      color: $secondary;
+    }
+  }
+  .player-card__button path {
+    .app--dark & {
+      fill: $primary;
+      opacity: 0.25;
+    }
+  }
 }
 
 //Player Status
@@ -253,9 +295,16 @@
   background: $light;
   border-color: $secondary;
   color: $secondary;
+  .app--dark & {
+    border-color: $primary;
+    background: none;
+  }
   .player-card__rank {
     color: $light;
     background: $secondary;
+    .app--dark & {
+      color: $darkest;
+    }
   }
   .player-card__button--star svg path,
   .player-card__button--favorite svg path,

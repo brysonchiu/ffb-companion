@@ -12,21 +12,19 @@ $white: hsla(60, 100%, 100%, 1);
 //Assign Colors
 $primary: $primary-blue;
 $secondary: $mid-blue;
-$starred: $green;
-$favorited: $yellow;
-$hated: $red;
-$darkest: $dark-blue;
+$positive: $green;
+$highlight: $yellow;
+$negative: $red;
+$darkest: $darkest-blue;
 $dark: $dark-blue;
 $mid: $mid-blue;
 $light: $light-gray;
 $lightest: $white;
 
-//Base Colors
-$light-background: $light;
-$dark-background: $darkest;
+$starred: $green;
+$favorited: $yellow;
+$hated: $red;
 
 //Typography
-$body-color: $primary;
-$heading-colors: $primary;
 $font-family: Arial, sans-serif;
 $base-font-size: 16px;

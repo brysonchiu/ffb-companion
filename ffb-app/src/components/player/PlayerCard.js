@@ -9,8 +9,10 @@ export function PlayerCard({
   overallPoints,
   playerTotalPoints,
   stats,
-  playerStatus,
-  updatePlayerStatus,
+  sentimentStatus,
+  updateSentimentStatus,
+  draftStatus,
+  updateDraftStatus,
   sentiment,
   displayedStats,
   currentPick,
@@ -18,16 +20,14 @@ export function PlayerCard({
 }) {
   return (
     <li
-      className={`player-card${playerStatus?.drafted ? " player-card--drafted" : ""}${
-        playerStatus && playerStatus.sentiment ? " player-card--" + playerStatus.sentiment : ""
-      }`}
+      className={`player-card${draftStatus ? " player-card--drafted" : ""}${sentimentStatus ? " player-card--" + sentimentStatus : ""}`}
       onClick={() => {
-        if (playerStatus?.drafted) {
+        if (draftStatus) {
           setCurrentPick(checkPick(currentPick - 1));
         } else {
           setCurrentPick(checkPick(currentPick + 1));
         }
-        updatePlayerStatus(playerId, "drafted");
+        updateDraftStatus(playerId);
       }}
     >
       <div className="player-card__rank">{rank}</div>
@@ -125,9 +125,9 @@ export function PlayerCard({
             className="player-card__button player-card__button--star"
             name="starred"
             onClick={(e) => {
-              if (!playerStatus?.drafted) {
+              if (!draftStatus) {
                 e.stopPropagation();
-                updatePlayerStatus(playerId, "sentiment", e.currentTarget.name);
+                updateSentimentStatus(playerId, e.currentTarget.name);
               }
             }}
           >
@@ -142,9 +142,9 @@ export function PlayerCard({
             className="player-card__button player-card__button--favorite"
             name="favorited"
             onClick={(e) => {
-              if (!playerStatus?.drafted) {
+              if (!draftStatus) {
                 e.stopPropagation();
-                updatePlayerStatus(playerId, "sentiment", e.currentTarget.name);
+                updateSentimentStatus(playerId, e.currentTarget.name);
               }
             }}
           >
@@ -159,9 +159,9 @@ export function PlayerCard({
             className="player-card__button player-card__button--hate"
             name="hated"
             onClick={(e) => {
-              if (!playerStatus?.drafted) {
+              if (!draftStatus) {
                 e.stopPropagation();
-                updatePlayerStatus(playerId, "sentiment", e.currentTarget.name);
+                updateSentimentStatus(playerId, e.currentTarget.name);
               }
             }}
           >

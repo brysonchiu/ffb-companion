@@ -6,10 +6,7 @@ export function PlayerSearch({ filter, setFilter }) {
     <div className="player-search__container">
       <input className="player-search" value={filter} onChange={(e) => setFilter(e.target.value)} placeholder="Search Player" />
       <IconSearch active={filter === "Search Player" || filter === "" ? true : false} />
-      <button
-        className={`icon-close-search${filter !== "Search Player" && filter !== "" ? " icon-close-search--active" : ""}`}
-        onClick={() => setFilter("Search Player")}
-      >
+      <button className={`icon-close-search${filter !== "Search Player" && filter !== "" ? " icon-close-search--active" : ""}`} onClick={() => setFilter("")}>
         <IconClose />
       </button>
     </div>

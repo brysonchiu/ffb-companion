@@ -1,4 +1,5 @@
 import { IconRightArrow } from "../icons/right-arrow.js";
+import { rosterSize, parseStringToFloat } from "../../helpers.js";
 
 export function UserPicks({ settings, currentPick }) {
   //Calculate user picks
@@ -18,26 +19,13 @@ export function UserPicks({ settings, currentPick }) {
     return picks;
   };
 
-  //Turn strings to floats
-  const returnFloat = (string) => {
-    return parseFloat(string) || 0;
-  };
   return (
     <div className="user-picks__container">
       <h2 className="visually-hidden">Your Picks</h2>
       <ul>
         {settings.general &&
           settings.roster &&
-          returnPicks(
-            returnFloat(settings.general.user_pick),
-            returnFloat(settings.general.teams),
-            returnFloat(settings.roster.qb) +
-              returnFloat(settings.roster.rb) +
-              returnFloat(settings.roster.wr) +
-              returnFloat(settings.roster.te) +
-              returnFloat(settings.roster.flex) +
-              returnFloat(settings.roster.bench)
-          ).map((userPick) => {
+          returnPicks(parseStringToFloat(settings.general.user_pick), parseStringToFloat(settings.general.teams), rosterSize(settings)).map((userPick) => {
             return (
               <li
                 key={userPick}
