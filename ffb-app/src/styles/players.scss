@@ -89,6 +89,70 @@
       color: $lightest;
     }
   }
+  .player-filter {
+    border: none;
+    display: flex;
+    padding: 0 0 0 40px;
+    margin: 0;
+    position: relative;
+    &:hover .player-filter__input-container {
+      margin-right: 2px;
+    }
+    .player-filter__input-container {
+      position: relative;
+      margin-right: -10px;
+      height: 20px;
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
+    legend {
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+      padding-top: 2px;
+      @extend .small1;
+      .app--dark & {
+        color: $lightest;
+      }
+    }
+    input[type="checkbox"] {
+      visibility: hidden;
+      &:checked + label {
+        background-color: $primary;
+        .app--dark & {
+          background-color: $lightest;
+        }
+      }
+    }
+    label {
+      background-color: $light;
+      border: 2px solid $primary;
+      border-radius: 50%;
+      cursor: pointer;
+      height: 20px;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 20px;
+      .app--dark & {
+        background-color: $darkest;
+        border-color: $lightest;
+      }
+    }
+    #filter-drafted:checked + label {
+      background-color: $secondary;
+    }
+    #filter-starred:checked + label {
+      background-color: $starred;
+    }
+    #filter-favorited:checked + label {
+      background-color: $favorited;
+    }
+    #filter-hated:checked + label {
+      background-color: $hated;
+    }
+  }
 }
 
 //Lists

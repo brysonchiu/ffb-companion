@@ -9,20 +9,37 @@ export function OverallList({
   updateSentimentStatus,
   draftStatus,
   updateDraftStatus,
-  filter,
+  playerSearch,
   currentPick,
   setCurrentPick,
   settings,
+  playerStatusFilters,
+  setPlayerStatusFilters,
 }) {
   let player = 0;
-  const filteredPlayers = (playersTotalPoints) => {
-    return playersTotalPoints.filter((obj) => {
-      if (filter !== "") {
-        return players[obj[0]]["PLAYER"].toLowerCase().includes(filter.toLowerCase());
-      } else {
-        return true;
-      }
-    });
+  const filteredPlayers = (players, playersTotalPoints, playerSearch) => {
+    return playersTotalPoints
+      .filter((obj) => {
+        ///check if draft status and filter status are in line
+        if ((draftStatus[obj[0]] && playerStatusFilters.drafted) || (!draftStatus[obj[0]] && playerStatusFilters.undrafted)) {
+          //then check if sentiment status and filters are true
+          if (sentimentStatus[obj[0]]) {
+            let sentiment = sentimentStatus[obj[0]];
+            return playerStatusFilters[sentiment];
+          } else {
+            return true;
+          }
+        } else {
+          return false;
+        }
+      })
+      .filter((obj) => {
+        if (playerSearch !== "") {
+          return players[obj[0]]["PLAYER"].toLowerCase().includes(playerSearch.toLowerCase());
+        } else {
+          return true;
+        }
+      });
   };
 
   const roundLoop = (filteredPlayers, settings) => {
@@ -79,12 +96,27 @@ export function OverallList({
     return playersSplitIntoRounds;
   };
 
+  const handlePlayerStatusFilters = (e) => {
+    setPlayerStatusFilters({ ...playerStatusFilters, [e.target.name]: !playerStatusFilters[e.target.name] });
+  };
+
   return (
     <div className="overall-list">
       <div className="list-head">
         <h2 className="list-heading">Overall</h2>
+        <fieldset className="player-filter">
+          <legend>Filter</legend>
+          {Object.keys(playerStatusFilters).map((key) => (
+            <div className="player-filter__input-container" key={key}>
+              <input type="checkbox" id={`filter-${key}`} name={key} checked={playerStatusFilters[key]} onChange={handlePlayerStatusFilters} />
+              <label htmlFor={`filter-${key}`}>
+                <span className="visually-hidden">{key}</span>
+              </label>
+            </div>
+          ))}
+        </fieldset>
       </div>
-      <div className="player-list">{roundLoop(filteredPlayers(playersTotalPoints), settings)}</div>
+      <div className="player-list">{roundLoop(filteredPlayers(players, playersTotalPoints, playerSearch), settings)}</div>
     </div>
   );
 }

@@ -9,8 +9,15 @@ function App() {
   const [players, setPlayers] = useState({});
   const [draftStatus, setDraftStatus] = useState({});
   const [sentimentStatus, setSentimentStatus] = useState({});
-  const [filter, setFilter] = useState("");
+  const [playerSearch, setPlayerSearch] = useState("");
   const [settings, setSettings] = useState({});
+  const [playerStatusFilters, setPlayerStatusFilters] = useState({
+    undrafted: true,
+    drafted: true,
+    starred: true,
+    favorited: true,
+    hated: true,
+  });
   const [currentPick, setCurrentPick] = useState(1);
   const [playersTotalPoints, setPlayersTotalPoints] = useState([]);
 
@@ -40,40 +47,44 @@ function App() {
     if (localStorage.getItem("draftStatus")) setDraftStatus(JSON.parse(localStorage.getItem("draftStatus")));
 
     //Get current pick from local storage
-    if (localStorage.getItem("currentPick")) setCurrentPick(localStorage.getItem("currentPick"));
+    if (localStorage.getItem("currentPick")) setCurrentPick(parseStringToFloat(localStorage.getItem("currentPick")));
 
     //Set default settings
-    setSettings({
-      general: {
-        teams: 12,
-        user_pick: 1,
-      },
-      roster: {
-        qb: 1,
-        rb: 2,
-        wr: 2,
-        te: 1,
-        flex: 1,
-        bench: 7,
-      },
-      scoring: {
-        pass_yrds: 0.04,
-        pass_td: 6,
-        pass_comp: 0,
-        pass_int: -2,
-        rush_yrds: 0.1,
-        rush_td: 6,
-        rec_yrds: 0.1,
-        rec_td: 6,
-        rec_rec: 1,
-        misc_fum: -2,
-      },
-      misc: {
-        menu_open: false,
-        color_mode: "light",
-      },
-    });
-  }, [setSettings, setPlayers]);
+    setSettings(
+      localStorage.getItem("settings")
+        ? JSON.parse(localStorage.getItem("settings"))
+        : {
+            general: {
+              teams: 12,
+              user_pick: 1,
+            },
+            roster: {
+              qb: 1,
+              rb: 2,
+              wr: 2,
+              te: 1,
+              flex: 1,
+              bench: 7,
+            },
+            scoring: {
+              pass_yrds: 0.04,
+              pass_td: 6,
+              pass_comp: 0,
+              pass_int: -2,
+              rush_yrds: 0.1,
+              rush_td: 6,
+              rec_yrds: 0.1,
+              rec_td: 6,
+              rec_rec: 1,
+              misc_fum: -2,
+            },
+            misc: {
+              menu_open: false,
+              color_mode: "light",
+            },
+          }
+    );
+  }, [setSettings, setPlayers, setSentimentStatus, setDraftStatus, setCurrentPick]);
 
   // Calculate players' total points and rank (sort)
   useEffect(() => {
@@ -155,9 +166,20 @@ function App() {
     localStorage.setItem("currentPick", currentPick);
   }, [currentPick]);
 
+  useEffect(() => {
+    localStorage.setItem("settings", JSON.stringify(settings));
+  }, [settings]);
+
   return (
     <div className={`app app--${settings.misc?.color_mode}`}>
-      <Header filter={filter} setFilter={setFilter} settings={settings} setSettings={setSettings} currentPick={currentPick} setCurrentPick={setCurrentPick} />
+      <Header
+        playerSearch={playerSearch}
+        setPlayerSearch={setPlayerSearch}
+        settings={settings}
+        setSettings={setSettings}
+        currentPick={currentPick}
+        setCurrentPick={setCurrentPick}
+      />
       <OverallList
         players={players}
         playersTotalPoints={playersTotalPoints}
@@ -165,10 +187,12 @@ function App() {
         updateSentimentStatus={updateSentimentStatus}
         draftStatus={draftStatus}
         updateDraftStatus={updateDraftStatus}
-        filter={filter}
+        playerSearch={playerSearch}
         settings={settings}
         currentPick={currentPick}
         setCurrentPick={setCurrentPick}
+        playerStatusFilters={playerStatusFilters}
+        setPlayerStatusFilters={setPlayerStatusFilters}
       />
       <PositionalLists
         players={players}
@@ -176,9 +200,10 @@ function App() {
         sentimentStatus={sentimentStatus}
         draftStatus={draftStatus}
         updateDraftStatus={updateDraftStatus}
-        filter={filter}
+        playerSearch={playerSearch}
         currentPick={currentPick}
         setCurrentPick={setCurrentPick}
+        playerStatusFilters={playerStatusFilters}
       />
       <Settings
         settings={settings}

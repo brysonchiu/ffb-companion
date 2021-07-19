@@ -16,7 +16,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
     }
   };
   const handleColorMode = (settings) => {
-    const targetMode = settings.misc.color_mode === "light" ? "dark" : "light";
+    const targetMode = settings.misc?.color_mode === "light" ? "dark" : "light";
     setSettings({
       ...settings,
       misc: {
@@ -244,7 +244,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
           <div className="settings__category-container settings__category-container--full">
             <div className="switch__container">
               <label className="switch">
-                <input type="checkbox" onChange={() => handleColorMode(settings)} />
+                <input type="checkbox" checked={settings.misc?.color_mode === "dark" ? true : false} onChange={() => handleColorMode(settings)} />
                 <span className="slider slider--round"></span>
               </label>
               <p className="switch__text">{settings.misc?.color_mode} mode</p>

@@ -20,7 +20,7 @@ export function roundNumber(num) {
 
 //Set min limit to 1 on current pick
 export function checkPick(currentPick) {
-  return currentPick < 1 ? 1 : currentPick;
+  return currentPick < 1 ? 1 : parseStringToFloat(currentPick);
 }
 
 //Total Roster Size

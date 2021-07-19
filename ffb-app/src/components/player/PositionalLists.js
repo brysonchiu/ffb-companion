@@ -2,7 +2,17 @@ import { useState } from "react";
 import { PlayerCard } from "./PlayerCard";
 import { IconDownCaret } from "../icons/down-caret.js";
 
-export function PositionalLists({ players, playersTotalPoints, sentimentStatus, draftStatus, updateDraftStatus, filter, currentPick, setCurrentPick }) {
+export function PositionalLists({
+  players,
+  playersTotalPoints,
+  sentimentStatus,
+  draftStatus,
+  updateDraftStatus,
+  playerSearch,
+  currentPick,
+  setCurrentPick,
+  playerStatusFilters,
+}) {
   const [displayedStats, setDisplayedStats] = useState({
     QB: "pass",
     RB: "rush",
@@ -36,8 +46,22 @@ export function PositionalLists({ players, playersTotalPoints, sentimentStatus, 
           {playersTotalPoints
             .filter((obj) => players[obj[0]]["POSITION"] === "QB")
             .filter((obj) => {
-              if (filter.toLowerCase() !== "search player" && filter !== "") {
-                return players[obj[0]]["PLAYER"].toLowerCase().includes(filter.toLowerCase());
+              ///check if draft status and filter status are in line
+              if ((draftStatus[obj[0]] && playerStatusFilters.drafted) || (!draftStatus[obj[0]] && playerStatusFilters.undrafted)) {
+                //then check if sentiment status and filters are true
+                if (sentimentStatus[obj[0]]) {
+                  let sentiment = sentimentStatus[obj[0]];
+                  return playerStatusFilters[sentiment];
+                } else {
+                  return true;
+                }
+              } else {
+                return false;
+              }
+            })
+            .filter((obj) => {
+              if (playerSearch.toLowerCase() !== "search player" && playerSearch !== "") {
+                return players[obj[0]]["PLAYER"].toLowerCase().includes(playerSearch.toLowerCase());
               } else {
                 return true;
               }
@@ -79,8 +103,22 @@ export function PositionalLists({ players, playersTotalPoints, sentimentStatus, 
           {playersTotalPoints
             .filter((obj) => players[obj[0]]["POSITION"] === "RB")
             .filter((obj) => {
-              if (filter.toLowerCase() !== "search player" && filter !== "") {
-                return players[obj[0]]["PLAYER"].toLowerCase().includes(filter.toLowerCase());
+              ///check if draft status and filter status are in line
+              if ((draftStatus[obj[0]] && playerStatusFilters.drafted) || (!draftStatus[obj[0]] && playerStatusFilters.undrafted)) {
+                //then check if sentiment status and filters are true
+                if (sentimentStatus[obj[0]]) {
+                  let sentiment = sentimentStatus[obj[0]];
+                  return playerStatusFilters[sentiment];
+                } else {
+                  return true;
+                }
+              } else {
+                return false;
+              }
+            })
+            .filter((obj) => {
+              if (playerSearch.toLowerCase() !== "search player" && playerSearch !== "") {
+                return players[obj[0]]["PLAYER"].toLowerCase().includes(playerSearch.toLowerCase());
               } else {
                 return true;
               }
@@ -122,8 +160,22 @@ export function PositionalLists({ players, playersTotalPoints, sentimentStatus, 
           {playersTotalPoints
             .filter((obj) => players[obj[0]]["POSITION"] === "WR")
             .filter((obj) => {
-              if (filter.toLowerCase() !== "search player" && filter !== "") {
-                return players[obj[0]]["PLAYER"].toLowerCase().includes(filter.toLowerCase());
+              ///check if draft status and filter status are in line
+              if ((draftStatus[obj[0]] && playerStatusFilters.drafted) || (!draftStatus[obj[0]] && playerStatusFilters.undrafted)) {
+                //then check if sentiment status and filters are true
+                if (sentimentStatus[obj[0]]) {
+                  let sentiment = sentimentStatus[obj[0]];
+                  return playerStatusFilters[sentiment];
+                } else {
+                  return true;
+                }
+              } else {
+                return false;
+              }
+            })
+            .filter((obj) => {
+              if (playerSearch.toLowerCase() !== "search player" && playerSearch !== "") {
+                return players[obj[0]]["PLAYER"].toLowerCase().includes(playerSearch.toLowerCase());
               } else {
                 return true;
               }
@@ -164,8 +216,22 @@ export function PositionalLists({ players, playersTotalPoints, sentimentStatus, 
           {playersTotalPoints
             .filter((obj) => players[obj[0]]["POSITION"] === "TE")
             .filter((obj) => {
-              if (filter.toLowerCase() !== "search player" && filter !== "") {
-                return players[obj[0]]["PLAYER"].toLowerCase().includes(filter.toLowerCase());
+              ///check if draft status and filter status are in line
+              if ((draftStatus[obj[0]] && playerStatusFilters.drafted) || (!draftStatus[obj[0]] && playerStatusFilters.undrafted)) {
+                //then check if sentiment status and filters are true
+                if (sentimentStatus[obj[0]]) {
+                  let sentiment = sentimentStatus[obj[0]];
+                  return playerStatusFilters[sentiment];
+                } else {
+                  return true;
+                }
+              } else {
+                return false;
+              }
+            })
+            .filter((obj) => {
+              if (playerSearch.toLowerCase() !== "search player" && playerSearch !== "") {
+                return players[obj[0]]["PLAYER"].toLowerCase().includes(playerSearch.toLowerCase());
               } else {
                 return true;
               }
