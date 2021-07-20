@@ -16,7 +16,6 @@ export function OverallList({
   playerStatusFilters,
   setPlayerStatusFilters,
 }) {
-  let player = 0;
   const filteredPlayers = (players, playersTotalPoints, playerSearch) => {
     return playersTotalPoints
       .filter((obj) => {
@@ -43,17 +42,20 @@ export function OverallList({
   };
 
   const roundLoop = (filteredPlayers, settings) => {
+    let player = 0;
     const rounds = [];
     const numberOfRounds = rosterSize(settings) + 1;
     if (filteredPlayers.length > 1) {
       for (let round = 1; round <= numberOfRounds; round++) {
+        let playerLoopReturn = playerLoop(filteredPlayers, settings, round, player);
+        player = playerLoopReturn[1];
         rounds.push(
           <React.Fragment key={round}>
             <h3 className="player-list__round-title">
               {round === rosterSize(settings) + 1 ? `Undrafted` : `Round `}
-              <span class="text--number">{round === rosterSize(settings) + 1 ? null : round}</span>
+              <span className="text--number">{round === rosterSize(settings) + 1 ? null : round}</span>
             </h3>
-            <ul className="player-list__round-list">{playerLoop(filteredPlayers, settings, round)}</ul>
+            <ul className="player-list__round-list">{playerLoopReturn[0]}</ul>
           </React.Fragment>
         );
       }
@@ -61,18 +63,18 @@ export function OverallList({
     return rounds;
   };
 
-  const playerLoop = (filteredPlayers, settings, round) => {
+  const playerLoop = (filteredPlayers, settings, round, player) => {
     const playersSplitIntoRounds = [];
     const firstPlayer = player;
     const lastPlayer = round === rosterSize(settings) + 1 ? filteredPlayers.length : firstPlayer + parseStringToFloat(settings.general?.teams);
-    for (let i = firstPlayer; i < lastPlayer; i++) {
+    for (let i = firstPlayer; i <= lastPlayer; i++) {
       if (
         //If rank is greater than the first pick of the round, and
         //A) If it is not the undrafted round and the rank is less than or eq to the last pick of the round, or
         //B) If it is the undrafted round
-        playersTotalPoints.findIndex((el) => el[0] === filteredPlayers[player]?.[0]) + 1 > (round - 1) * parseStringToFloat(settings.general?.teams) &&
+        playersTotalPoints.findIndex((el) => el[0] === filteredPlayers[i]?.[0]) + 1 > (round - 1) * parseStringToFloat(settings.general?.teams) &&
         ((round !== rosterSize(settings) + 1 &&
-          playersTotalPoints.findIndex((el) => el[0] === filteredPlayers[player]?.[0]) + 1 <= round * parseStringToFloat(settings.general?.teams)) ||
+          playersTotalPoints.findIndex((el) => el[0] === filteredPlayers[i]?.[0]) + 1 <= round * parseStringToFloat(settings.general?.teams)) ||
           round === rosterSize(settings) + 1)
       ) {
         playersSplitIntoRounds.push(
@@ -93,10 +95,10 @@ export function OverallList({
             setCurrentPick={setCurrentPick}
           />
         );
-        player++;
+        player = i;
       }
     }
-    return playersSplitIntoRounds;
+    return [playersSplitIntoRounds, player];
   };
 
   const handlePlayerStatusFilters = (e) => {
