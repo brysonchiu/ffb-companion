@@ -80,6 +80,7 @@ function App() {
             },
             misc: {
               menu_open: false,
+              menu_transition: false,
               color_mode: "light",
             },
           }

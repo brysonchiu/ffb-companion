@@ -33,4 +33,10 @@ small,
 .small3 {
   font-size: 0.579rem;
 }
-// Compontents
+.text--number {
+  font-family: $numbers-font-famiy;
+}
+input {
+  font-family: $font-family;
+  font-size: 1rem;
+}

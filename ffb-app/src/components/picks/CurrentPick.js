@@ -7,7 +7,7 @@ export function CurrentPick({ currentPick, setCurrentPick }) {
     <div className="current-pick">
       <div className="current-pick__pick-container">
         <h2 className="visually-hidden">Current Pick</h2>
-        <p className="current-pick__pick">{currentPick}</p>
+        <p className="current-pick__pick text--number">{currentPick}</p>
       </div>
       <button className="current-pick__adjuster current-pick__adjuster-up" onClick={() => setCurrentPick(checkPick(currentPick + 1))}>
         <IconPlus />

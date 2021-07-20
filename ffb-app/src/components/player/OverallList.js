@@ -49,7 +49,10 @@ export function OverallList({
       for (let round = 1; round <= numberOfRounds; round++) {
         rounds.push(
           <React.Fragment key={round}>
-            <h3 className="player-list__round-title">{round === rosterSize(settings) + 1 ? `Undrafted` : `Round ${round}`}</h3>
+            <h3 className="player-list__round-title">
+              {round === rosterSize(settings) + 1 ? `Undrafted` : `Round `}
+              <span class="text--number">{round === rosterSize(settings) + 1 ? null : round}</span>
+            </h3>
             <ul className="player-list__round-list">{playerLoop(filteredPlayers, settings, round)}</ul>
           </React.Fragment>
         );

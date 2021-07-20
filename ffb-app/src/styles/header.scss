@@ -37,6 +37,10 @@
   .app--dark & path {
     fill: $lightest;
   }
+  svg {
+    transform: scale(0.85);
+    transform-origin: center left;
+  }
 }
 
 // Current Pick
@@ -110,7 +114,8 @@
   color: $secondary;
   padding: 0 28px 0 6px;
   position: relative;
-  font-size: 1rem;
+  font-weight: 600;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   .app--dark & {
     border-color: $primary;
   }
@@ -130,7 +135,15 @@
     }
   }
   &::placeholder {
+    font-family: $font-family;
+    font-weight: 450;
     color: $secondary;
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+  }
+  &:hover::placeholder,
+  &:focus::placeholder {
+    opacity: 1;
   }
 }
 .icon-search {
@@ -189,6 +202,10 @@
   .user-pick__list-item {
     display: flex;
     align-items: center;
+    transition: color 0.4s cubic-bezier(0, 0, 0, 1);
+    path {
+      transition: fill 0.4s cubic-bezier(0, 0, 0, 1);
+    }
     &--past {
       color: $secondary;
       path {
@@ -207,6 +224,14 @@
     }
     &--error {
       color: $negative;
+      transition: color 1s ease;
+      .app--dark & {
+        color: $highlight;
+      }
+    }
+    &--current {
+      color: $negative;
+      transition: color 1s ease;
       .app--dark & {
         color: $highlight;
       }
@@ -217,23 +242,11 @@
   }
   .icon-right-arrow {
     transform: scale(1.5);
-    padding: 0 3px;
+    padding: 0 3px 1px;
+    height: 4px;
     width: 10px;
   }
   .user-pick {
     padding: 0 1px 0 0;
-  }
-}
-// .user-pick__list-item--past + .user-pick__list-item:not(.user-pick__list-item--past) .user-pick {
-//   background: $primary;
-//   border-radius: 8px;
-//   color: $lightest;
-//   padding: 0 5px;
-//   margin-right: 1px;
-// }
-.user-picks__container .user-pick__list-item.user-pick__list-item--current .user-pick {
-  color: $negative;
-  .app--dark & {
-    color: $highlight;
   }
 }

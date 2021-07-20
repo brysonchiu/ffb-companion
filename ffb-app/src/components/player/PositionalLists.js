@@ -13,6 +13,7 @@ export function PositionalLists({
   setCurrentPick,
   playerStatusFilters,
 }) {
+  //Set display stats initial state
   const [displayedStats, setDisplayedStats] = useState({
     QB: "pass",
     RB: "rush",

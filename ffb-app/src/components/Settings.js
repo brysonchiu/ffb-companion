@@ -1,11 +1,28 @@
 import { IconClose } from "./icons/close.js";
 
 export function Settings({ settings, setSettings, setSentimentStatus, setDraftStatus, setCurrentPick }) {
-  const handleSettingsMenu = () => {
-    const updatedSettings = { ...settings };
-    updatedSettings["misc"]["menu_open"] = false;
-    setSettings(updatedSettings);
+  //closing the menu
+  const handleSettingsMenu = (settings) => {
+    setSettings({
+      ...settings,
+      misc: {
+        ...settings.misc,
+        menu_open: false,
+        menu_transition: true,
+      },
+    });
   };
+  const handleSettingsMenuTransition = (settings) => {
+    setSettings({
+      ...settings,
+      misc: {
+        ...settings.misc,
+        menu_transition: false,
+      },
+    });
+  };
+
+  //set state for updating settings
   const updateSettings = (property, cat, value) => {
     let test;
     cat === "scoring" ? (test = new RegExp(/^(?:-?[\d]*(?:\.?[\d]{1,2})||-?[\d]*\.||-)$/, "i")) : (test = new RegExp(/^\d+$/, "i"));
@@ -15,6 +32,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
       setSettings(updatedSettings);
     }
   };
+  //toggling the color mode
   const handleColorMode = (settings) => {
     const targetMode = settings.misc?.color_mode === "light" ? "dark" : "light";
     setSettings({
@@ -26,9 +44,13 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
     });
   };
   return (
-    <div className={`settings${settings["misc"] && settings["misc"]["menu_open"] ? " settings--open" : ""}`}>
+    <div
+      className={`settings${settings["misc"]?.["menu_open"] ? " settings--open" : ""}${
+        settings["misc"]?.["menu_transition"] ? " settings--transitioning" : ""
+      }`}
+    >
       <div className="settings__container">
-        <button className="close-settings" onClick={() => handleSettingsMenu()}>
+        <button className="close-settings" onClick={() => handleSettingsMenu(settings)}>
           <IconClose />
         </button>
         <div className="league-settings">
@@ -39,6 +61,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
               <div className="input-containter">
                 <label htmlFor="teams">Teams</label>
                 <input
+                  className="text--number"
                   id="teams"
                   name="teams"
                   type="text"
@@ -51,6 +74,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
               <div className="input-containter">
                 <label htmlFor="user-pick">Your Pick</label>
                 <input
+                  className="text--number"
                   id="user-pick"
                   name="user_pick"
                   type="text"
@@ -65,31 +89,60 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
             {settings.roster?.qb !== undefined && (
               <div className="input-containter">
                 <label htmlFor="qb">QB</label>
-                <input id="qb" name="qb" type="text" value={settings.roster.qb} onChange={(e) => updateSettings(e.target.name, "roster", e.target.value)} />
+                <input
+                  className="text--number"
+                  id="qb"
+                  name="qb"
+                  type="text"
+                  value={settings.roster.qb}
+                  onChange={(e) => updateSettings(e.target.name, "roster", e.target.value)}
+                />
               </div>
             )}
             {settings.roster?.rb !== undefined && (
               <div className="input-containter">
                 <label htmlFor="rb">RB</label>
-                <input id="rb" name="rb" type="text" value={settings.roster.rb} onChange={(e) => updateSettings(e.target.name, "roster", e.target.value)} />
+                <input
+                  className="text--number"
+                  id="rb"
+                  name="rb"
+                  type="text"
+                  value={settings.roster.rb}
+                  onChange={(e) => updateSettings(e.target.name, "roster", e.target.value)}
+                />
               </div>
             )}
             {settings.roster?.wr !== undefined && (
               <div className="input-containter">
                 <label htmlFor="wr">WR</label>
-                <input id="wr" name="wr" type="text" value={settings.roster.wr} onChange={(e) => updateSettings(e.target.name, "roster", e.target.value)} />
+                <input
+                  className="text--number"
+                  id="wr"
+                  name="wr"
+                  type="text"
+                  value={settings.roster.wr}
+                  onChange={(e) => updateSettings(e.target.name, "roster", e.target.value)}
+                />
               </div>
             )}
             {settings.roster?.te !== undefined && (
               <div className="input-containter">
                 <label htmlFor="te">TE</label>
-                <input id="te" name="te" type="text" value={settings.roster.te} onChange={(e) => updateSettings(e.target.name, "roster", e.target.value)} />
+                <input
+                  className="text--number"
+                  id="te"
+                  name="te"
+                  type="text"
+                  value={settings.roster.te}
+                  onChange={(e) => updateSettings(e.target.name, "roster", e.target.value)}
+                />
               </div>
             )}
             {settings.roster?.flex !== undefined && (
               <div className="input-containter">
                 <label htmlFor="flex">FLEX</label>
                 <input
+                  className="text--number"
                   id="flex"
                   name="flex"
                   type="text"
@@ -102,6 +155,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
               <div className="input-containter">
                 <label htmlFor="bench">BENCH</label>
                 <input
+                  className="text--number"
                   id="bench"
                   name="bench"
                   type="text"
@@ -118,6 +172,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
               <div className="input-containter">
                 <label htmlFor="pass_yrds">YRDS</label>
                 <input
+                  className="text--number"
                   id="pass_yrds"
                   name="pass_yrds"
                   type="text"
@@ -130,6 +185,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
               <div className="input-containter">
                 <label htmlFor="pass_td">TD</label>
                 <input
+                  className="text--number"
                   id="pass_td"
                   name="pass_td"
                   type="text"
@@ -142,6 +198,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
               <div className="input-containter">
                 <label htmlFor="pass_comp">COMP</label>
                 <input
+                  className="text--number"
                   id="pass_comp"
                   name="pass_comp"
                   type="text"
@@ -154,6 +211,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
               <div className="input-containter">
                 <label htmlFor="pass_int">INT</label>
                 <input
+                  className="text--number"
                   id="pass_int"
                   name="pass_int"
                   type="text"
@@ -167,6 +225,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
               <div className="input-containter">
                 <label htmlFor="rush_yrds">YRDS</label>
                 <input
+                  className="text--number"
                   id="rush_yrds"
                   name="rush_yrds"
                   type="text"
@@ -179,6 +238,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
               <div className="input-containter">
                 <label htmlFor="rush_td">TD</label>
                 <input
+                  className="text--number"
                   id="rush_td"
                   name="rush_td"
                   type="text"
@@ -192,6 +252,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
               <div className="input-containter">
                 <label htmlFor="rec_yrds">YRDS</label>
                 <input
+                  className="text--number"
                   id="rec_yrds"
                   name="rec_yrds"
                   type="text"
@@ -204,6 +265,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
               <div className="input-containter">
                 <label htmlFor="rec_td">TD</label>
                 <input
+                  className="text--number"
                   id="rec_td"
                   name="rec_td"
                   type="text"
@@ -216,6 +278,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
               <div className="input-containter">
                 <label htmlFor="rec_rec">REC</label>
                 <input
+                  className="text--number"
                   id="rec_rec"
                   name="rec_rec"
                   type="text"
@@ -229,6 +292,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
               <div className="input-containter">
                 <label htmlFor="misc_fum">FUM</label>
                 <input
+                  className="text--number"
                   id="misc_fum"
                   name="misc_fum"
                   type="text"
@@ -266,7 +330,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
           </div>
         </div>
       </div>
-      <div className="settings__overlay" onClick={() => handleSettingsMenu()}></div>
+      <div className="settings__overlay" onClick={() => handleSettingsMenu(settings)} onTransitionEnd={() => handleSettingsMenuTransition(settings)}></div>
     </div>
   );
 }

@@ -1,7 +1,9 @@
 .settings {
-  display: none;
-  &--open {
-    display: block;
+  &:not(.settings__transitioning):not(.settings--open) {
+    pointer-events: none;
+  }
+  &.settings__transitioning {
+    pointer-events: none;
   }
   .settings__container {
     padding: 2rem 1.5rem 2rem;
@@ -17,6 +19,8 @@
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
+    transform: translateX(-100%);
+    transition: background 0.2s cubic-bezier(0.65, 0.05, 0.36, 1), transform 0.4s cubic-bezier(0.65, 0.05, 0.36, 1);
     .app--dark & {
       background: $darkest;
       box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
@@ -24,16 +28,27 @@
   }
   .settings__overlay {
     background: $darkest;
-    opacity: 0.4;
     z-index: 49;
     width: 100vw;
     height: 100vh;
     position: absolute;
     top: 0;
     left: 0;
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.65, 0.05, 0.36, 1);
     .app--dark & {
       background: #000000;
-      opacity: 0.75;
+    }
+  }
+  &--open {
+    .settings__container {
+      transform: none;
+    }
+    .settings__overlay {
+      opacity: 0.4;
+      .app--dark & {
+        opacity: 0.8;
+      }
     }
   }
   .close-settings {
@@ -56,6 +71,7 @@
   .settings__title {
     margin-top: 2.5rem;
     border-bottom: 2px solid $primary;
+    font-weight: 800;
     .app--dark & {
       border-color: $lightest;
     }
@@ -86,7 +102,7 @@
     margin-top: 1rem;
     margin-bottom: 0.25rem;
     grid-column: 1 / 4;
-    font-weight: normal;
+    font-weight: 500;
     @extend .small1;
   }
   .settings__category-title + .settings__scoring-title {
@@ -102,7 +118,7 @@
     align-items: center;
     label {
       height: calc(2rem - 2px);
-      padding: 2px 0 2px 0.5rem;
+      padding: 3px 0 2px 0.5rem;
       flex: 1 1 auto;
       font-weight: bold;
       display: flex;
@@ -119,6 +135,7 @@
       width: 30px;
       text-align: right;
       flex: 0 0 auto;
+      font-weight: 450;
       @extend .small2;
     }
   }
@@ -131,12 +148,25 @@
     padding: 0.25rem 0.5rem;
     width: 100%;
     cursor: pointer;
+    transition: all 0.2s cubic-bezier(0, 0, 0, 1);
+    &:hover {
+      background: $positive;
+    }
     .app--dark & {
       border-color: $lightest;
+      background: $lightest;
+      &:hover {
+        border-color: $highlight;
+        background: $highlight;
+      }
     }
     &--positive {
       border: 2px solid $positive;
       color: $positive;
+      &:hover {
+        background: $positive;
+        color: $primary;
+      }
       .app--dark & {
         border-color: $positive;
         background: $positive;
@@ -146,6 +176,10 @@
     &--negative {
       border: 2px solid $negative;
       color: $negative;
+      &:hover {
+        background: $negative;
+        color: $primary;
+      }
       .app--dark & {
         border-color: $negative;
         background: $negative;
@@ -153,9 +187,6 @@
         &:hover {
         }
       }
-    }
-    &:hover {
-      background: $positive;
     }
   }
   .switch__container {
@@ -166,8 +197,8 @@
   .switch {
     position: relative;
     display: inline-block;
-    width: 60px;
-    height: 32px;
+    width: 56px;
+    height: 28px;
     margin: 1rem 1rem 1rem 0;
     input {
       opacity: 0;
@@ -180,9 +211,9 @@
         }
       }
       &:checked + .slider:before {
-        -webkit-transform: translateX(26px);
-        -ms-transform: translateX(26px);
-        transform: translateX(26px);
+        -webkit-transform: translateX(28px);
+        -ms-transform: translateX(28px);
+        transform: translateX(28px);
       }
     }
     .slider {
@@ -193,10 +224,9 @@
       right: 0;
       bottom: 0;
       background-color: $lightest;
-      -webkit-transition: 0.4s;
       transition: 0.4s;
       &--round {
-        border-radius: 34px;
+        border-radius: 14px;
         &:before {
           border-radius: 50%;
         }
@@ -205,10 +235,10 @@
     .slider:before {
       position: absolute;
       content: "";
-      height: 28px;
-      width: 28px;
-      left: 2px;
-      bottom: 2px;
+      height: 22px;
+      width: 22px;
+      left: 3px;
+      bottom: 3px;
       background-color: $primary;
       -webkit-transition: 0.4s;
       transition: 0.4s;

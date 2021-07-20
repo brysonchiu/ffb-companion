@@ -33,7 +33,7 @@ export function UserPicks({ settings, currentPick }) {
                   currentPick > userPick ? " user-pick__list-item--past" : ""
                 }${userPick === "Oops! You have a settings error." ? " user-pick__list-item--error" : ""} `}
               >
-                <span className="user-pick">{userPick}</span> <IconRightArrow />
+                <span className="user-pick text--number">{userPick}</span> <IconRightArrow />
               </li>
             );
           })}

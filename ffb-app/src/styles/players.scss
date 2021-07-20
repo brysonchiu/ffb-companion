@@ -57,6 +57,7 @@
   }
   .list-heading {
     margin-right: 1rem;
+    font-weight: 800;
   }
   .stats-dropdrown__container {
     .icon-down-caret {
@@ -85,6 +86,7 @@
     z-index: 2;
     position: relative;
     outline: none;
+    font-weight: 600;
     .app--dark & {
       color: $lightest;
     }
@@ -95,26 +97,52 @@
     padding: 0 0 0 40px;
     margin: 0;
     position: relative;
-    &:hover .player-filter__input-container {
-      margin-right: 2px;
+    &:hover .player-filter__input-container:nth-child(n),
+    &:hover legend:nth-child(n) {
+      transform: translateX(0);
     }
     .player-filter__input-container {
       position: relative;
-      margin-right: -10px;
+      margin-right: 2px;
+      // margin-right: -10px;
       height: 20px;
+      // transition: margin-right 300ms ease-out;
+      &:nth-child(6) {
+        transform: none;
+      }
+      &:nth-child(5) {
+        transform: translateX(10px);
+      }
+      &:nth-child(4) {
+        transform: translateX(20px);
+      }
+      &:nth-child(3) {
+        transform: translateX(30px);
+      }
+      &:nth-child(2) {
+        transform: translateX(40px);
+      }
       &:last-of-type {
         margin-right: 0;
+      }
+      &:hover {
+        z-index: 6;
       }
     }
     legend {
       position: absolute;
       left: 0;
-      font-weight: bold;
+      font-weight: 600;
       padding-top: 2px;
+      transform: translateX(40px);
       @extend .small1;
       .app--dark & {
         color: $lightest;
       }
+    }
+    .player-filter__input-container,
+    legend {
+      transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
     }
     input[type="checkbox"] {
       visibility: hidden;
@@ -135,9 +163,17 @@
       position: absolute;
       top: 0;
       width: 20px;
+      transition: transform 0.3s cubic-bezier(0, 0, 0, 1), box-shadow 0.3s cubic-bezier(0, 0, 0, 1);
       .app--dark & {
         background-color: $darkest;
         border-color: $lightest;
+      }
+      &:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 3px 1px rgba(71, 93, 91, 0.2);
+        .app--dark & {
+          box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.5);
+        }
       }
     }
     #filter-drafted:checked + label {
@@ -165,8 +201,13 @@
   padding-right: 1rem;
 }
 .player-list__round-title {
-  font-size: 1rem;
+  font-weight: 600;
   margin: 1.875rem 0 0.5rem;
+  height: 20px;
+  @extend .small1;
+  span {
+    font-weight: 500;
+  }
 }
 .player-list__round-list {
   padding: 0;
@@ -175,7 +216,7 @@
 
 //Player Card
 .player-card {
-  min-width: 450px;
+  min-width: 400px;
   margin: 0.75rem 0;
   padding: 0.35rem 0.15rem;
   overflow: hidden;
@@ -187,40 +228,44 @@
   width: 100%;
   height: 38px;
   border: 2px solid $lightest;
+  transition: all 0.2s cubic-bezier(0, 0, 0, 1);
   &__rank {
     align-self: center;
     background: $primary;
     position: relative;
-    padding: 0 2px;
+    padding: 1px 2px 0;
     margin: 0 0.25rem;
     width: 32px;
     text-align: center;
     color: $lightest;
-    font-weight: 700;
+    font-weight: 625;
     flex: 0 0 auto;
     border-radius: 8px;
     @extend .small2;
   }
   &__name {
     margin: 0 0.25rem;
-    font-weight: 700;
+    font-weight: 650;
     font-size: 1rem;
     white-space: nowrap;
   }
   &__position {
-    margin: 0 0.25rem 0;
+    margin: 0 0.5rem;
     text-transform: uppercase;
-    font-size: 0.8rem;
+    font-weight: 500;
+    @extend .small1;
   }
   &__team {
     text-transform: uppercase;
-    margin: 0 0.25rem 0;
+    margin: 0 0.25rem;
+    font-weight: 500;
+    letter-spacing: 0.4px;
     @extend .small2;
   }
   &__pnts {
-    margin: 0 0.25rem;
-    font-weight: bold;
-    @extend small;
+    margin: 0 0.5rem;
+    font-weight: 650;
+    @extend .small1;
   }
 }
 
@@ -231,15 +276,16 @@
     position: static;
   }
   td {
+    font-weight: 500;
     @extend .small2;
   }
   th {
+    font-weight: 650;
     @extend .small3;
   }
   td,
   th {
     text-align: center;
-    font-weight: bold;
     line-height: 1.1;
     padding: 0 6px;
   }
@@ -255,11 +301,17 @@
   &--rec {
     min-width: 155px;
   }
+  th.stats-table__total-points {
+    font-weight: 800;
+  }
+  td.stats-table__total-points {
+    font-weight: 675;
+  }
 }
 
 //Player Hover
 .player-card:hover:not(.player-card--drafted):not(.player-card--hate):not(.player-card--favorite):not(.player-card--star) {
-  border: 2px solid $primary;
+  border-color: $primary;
   .app--dark & {
     border-color: $secondary;
     background: $secondary;

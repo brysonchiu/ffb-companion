@@ -30,17 +30,17 @@ export function PlayerCard({
         updateDraftStatus(playerId);
       }}
     >
-      <div className="player-card__rank">{rank}</div>
+      <div className="player-card__rank text--number">{rank}</div>
       {position && <div className="player-card__position">{position}</div>}
       <div className="player-card__name">{player}</div>
       {team && <div className="player-card__team">{team}</div>}
-      {overallPoints !== undefined && <div className="player-card__pnts">{roundNumber(overallPoints)}</div>}
+      {overallPoints !== undefined && <div className="player-card__pnts text--number">{roundNumber(overallPoints)}</div>}
       {stats && stats["PASSING ATT"] && stats["PASSING CMP"] && stats["PASSING INTS"] && stats["PASSING TDS"] && stats["PASSING YDS"] && (
         <table className={`stats-table stats-table--pass${displayedStats !== "pass" ? " stats-table--hidden" : ""}`}>
           <caption className="visually-hidden">Passing Stats</caption>
           <thead>
             <tr>
-              <th>PNTS</th>
+              <th className="stats-table__total-points">PNTS</th>
               <th>ATT</th>
               <th>CMP</th>
               <th>YDS</th>
@@ -48,9 +48,9 @@ export function PlayerCard({
               <th>INTS</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text--number">
             <tr>
-              <td>{roundNumber(playerTotalPoints)}</td>
+              <td className="stats-table__total-points">{roundNumber(playerTotalPoints)}</td>
               <td>{roundNumber(stats["PASSING ATT"])}</td>
               <td>{roundNumber(stats["PASSING CMP"])}</td>
               <td>{roundNumber(stats["PASSING YDS"])}</td>
@@ -65,15 +65,15 @@ export function PlayerCard({
           <caption className="visually-hidden">Rushing Stats</caption>
           <thead>
             <tr>
-              <th>PNTS</th>
+              <th className="stats-table__total-points">PNTS</th>
               <th>ATT</th>
               <th>YDS</th>
               <th>TDS</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text--number">
             <tr>
-              <td>{roundNumber(playerTotalPoints)}</td>
+              <td className="stats-table__total-points">{roundNumber(playerTotalPoints)}</td>
               <td>{roundNumber(stats["RUSHING ATT"])}</td>
               <td>{roundNumber(stats["RUSHING YDS"])}</td>
               <td>{roundNumber(stats["RUSHING TDS"])}</td>
@@ -86,15 +86,15 @@ export function PlayerCard({
           <caption className="visually-hidden">Receiving Stats</caption>
           <thead>
             <tr>
-              <th>PNTS</th>
+              <th className="stats-table__total-points">PNTS</th>
               <th>REC</th>
               <th>YDS</th>
               <th>TDS</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text--number">
             <tr>
-              <td>{roundNumber(playerTotalPoints)}</td>
+              <td className="stats-table__total-points">{roundNumber(playerTotalPoints)}</td>
               <td>{roundNumber(stats["RECEIVING REC"])}</td>
               <td>{roundNumber(stats["RECEIVING YDS"])}</td>
               <td>{roundNumber(stats["RECEIVING TDS"])}</td>
@@ -103,17 +103,17 @@ export function PlayerCard({
         </table>
       )}
       {stats && stats["MISC FL"] && (
-        <table className={`stats-table stats-table--rec${displayedStats !== "misc" ? " stats-table--hidden" : ""}`}>
+        <table className={`stats-table stats-table--misc${displayedStats !== "misc" ? " stats-table--hidden" : ""}`}>
           <caption className="visually-hidden">Miscellaneous Stats</caption>
           <thead>
             <tr>
-              <th>PNTS</th>
+              <th className="stats-table__total-points">PNTS</th>
               <th>FUM</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text--number">
             <tr>
-              <td>{roundNumber(playerTotalPoints)}</td>
+              <td className="stats-table__total-points">{roundNumber(playerTotalPoints)}</td>
               <td>{roundNumber(stats["MISC FL"])}</td>
             </tr>
           </tbody>
