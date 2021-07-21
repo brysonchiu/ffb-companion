@@ -6,7 +6,6 @@ import { UserPicks } from "./picks/UserPicks.js";
 export function Header({ playerSearch, setPlayerSearch, settings, setSettings, currentPick, setCurrentPick }) {
   return (
     <header className="header">
-      <h1 className="visually-hidden">Fantasy Football Draft Kit</h1>
       <div className="header__settings">
         <IconHamburger settings={settings} setSettings={setSettings} />
       </div>

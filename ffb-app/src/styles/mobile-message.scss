@@ -1,0 +1,62 @@
+.mobile-message__container {
+  display: none;
+}
+@media only screen and (max-width: 979px) {
+  .header,
+  .overall-list,
+  .positional-list__container,
+  .settings {
+    display: none;
+  }
+  .mobile-message__container {
+    display: block;
+    height: 100vh;
+    width: 100vw;
+    background: $darkest;
+    position: fixed;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 1rem;
+    .mobile-message__title {
+      color: $lightest;
+      width: 80%;
+      max-width: 400px;
+      margin-top: 1.5rem;
+      line-height: 1.2;
+    }
+    .icon-browser-window {
+      transform: scale(1);
+      .icon-left-right-arrows {
+        animation: browser-window 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+        transform-origin: center center;
+      }
+    }
+    .mobile-message {
+      color: $secondary;
+      width: 80%;
+      max-width: 400px;
+    }
+  }
+}
+
+@media only screen and (max-width: 419px) {
+  .icon-browser-window {
+    transform: scale(0.8);
+  }
+}
+
+@keyframes browser-window {
+  0% {
+    transform: scaleX(1);
+  }
+  30% {
+    transform: scaleX(1.2);
+  }
+  60% {
+    transform: scaleX(1);
+  }
+}

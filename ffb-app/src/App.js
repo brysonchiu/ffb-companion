@@ -3,6 +3,7 @@ import { Header } from "./components/Header.js";
 import { OverallList } from "./components/player/OverallList.js";
 import { PositionalLists } from "./components/player/PositionalLists.js";
 import { Settings } from "./components/Settings.js";
+import { MobileMessage } from "./components/MobileMessage.js";
 import { parseStringToFloat } from "./helpers.js";
 
 function App() {
@@ -173,6 +174,7 @@ function App() {
 
   return (
     <div className={`app app--${settings.misc?.color_mode}`}>
+      <h1 className="visually-hidden">Fantasy Football Draft Kit</h1>
       <Header
         playerSearch={playerSearch}
         setPlayerSearch={setPlayerSearch}
@@ -213,6 +215,7 @@ function App() {
         setSentimentStatus={setSentimentStatus}
         setCurrentPick={setCurrentPick}
       />
+      <MobileMessage />
     </div>
   );
 }
