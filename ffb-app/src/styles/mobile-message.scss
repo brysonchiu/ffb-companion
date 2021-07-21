@@ -9,9 +9,8 @@
     display: none;
   }
   .mobile-message__container {
-    display: block;
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     background: $darkest;
     position: fixed;
     z-index: 200;
@@ -46,6 +45,14 @@
 @media only screen and (max-width: 419px) {
   .icon-browser-window {
     transform: scale(0.8);
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  @media only screen and (max-width: 979px) {
+    .mobile-message__container .mobile-message__container {
+      margin-bottom: 5rem;
+    }
   }
 }
 
