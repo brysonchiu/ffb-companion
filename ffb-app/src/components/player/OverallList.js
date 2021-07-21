@@ -45,7 +45,7 @@ export function OverallList({
     let player = 0;
     const rounds = [];
     const numberOfRounds = rosterSize(settings) + 1;
-    if (filteredPlayers.length > 1) {
+    if (filteredPlayers.length >= 1) {
       for (let round = 1; round <= numberOfRounds; round++) {
         let playerLoopReturn = playerLoop(filteredPlayers, settings, round, player);
         player = playerLoopReturn[1];
