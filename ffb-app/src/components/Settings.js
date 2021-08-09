@@ -2,7 +2,7 @@ import { IconClose } from "./icons/close.js";
 
 export function Settings({ settings, setSettings, setSentimentStatus, setDraftStatus, setCurrentPick }) {
   //closing the menu
-  const handleSettingsMenu = (settings) => {
+  const handleSettingsMenu = () => {
     setSettings({
       ...settings,
       misc: {
@@ -12,7 +12,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
       },
     });
   };
-  const handleSettingsMenuTransition = (settings) => {
+  const handleSettingsMenuTransition = () => {
     setSettings({
       ...settings,
       misc: {
@@ -33,13 +33,23 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
     }
   };
   //toggling the color mode
-  const handleColorMode = (settings) => {
+  const handleColorMode = () => {
     const targetMode = settings.misc?.color_mode === "light" ? "dark" : "light";
     setSettings({
       ...settings,
       misc: {
         ...settings.misc,
         color_mode: targetMode,
+      },
+    });
+  };
+  //toggle slider setting
+  const handleToggle = (property, cat) => {
+    setSettings({
+      ...settings,
+      [cat]: {
+        ...settings[cat],
+        [property]: !settings[cat][property],
       },
     });
   };
@@ -50,7 +60,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
       }`}
     >
       <div className="settings__container">
-        <button className="close-settings" onClick={() => handleSettingsMenu(settings)}>
+        <button className="close-settings" onClick={() => handleSettingsMenu()}>
           <IconClose />
         </button>
         <div className="league-settings">
@@ -81,6 +91,26 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   value={settings.general.user_pick}
                   onChange={(e) => updateSettings(e.target.name, "general", e.target.value)}
                 />
+              </div>
+            )}
+          </div>
+          <div className="settings__category-container settings__category-container--full">
+            {settings.general?.flex_te !== undefined && (
+              <div className="switch__container">
+                <label className="switch">
+                  <input type="checkbox" name="flex_te" checked={settings.general?.flex_te} onChange={(e) => handleToggle(e.target.name, "general")} />
+                  <span className="slider slider--round"></span>
+                </label>
+                <p className="switch__text">TE included in flex</p>
+              </div>
+            )}
+            {settings.general?.flex_qb !== undefined && (
+              <div className="switch__container">
+                <label className="switch">
+                  <input type="checkbox" name="flex_qb" checked={settings.general?.flex_qb} onChange={(e) => handleToggle(e.target.name, "general")} />
+                  <span className="slider slider--round"></span>
+                </label>
+                <p className="switch__text">QB included in flex</p>
               </div>
             )}
           </div>
@@ -147,6 +177,32 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="flex"
                   type="text"
                   value={settings.roster.flex}
+                  onChange={(e) => updateSettings(e.target.name, "roster", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.roster?.k !== undefined && (
+              <div className="input-containter">
+                <label htmlFor="k">K</label>
+                <input
+                  className="text--number"
+                  id="k"
+                  name="k"
+                  type="text"
+                  value={settings.roster.k}
+                  onChange={(e) => updateSettings(e.target.name, "roster", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.roster?.dst !== undefined && (
+              <div className="input-containter">
+                <label htmlFor="dst">DST</label>
+                <input
+                  className="text--number"
+                  id="dst"
+                  name="dst"
+                  type="text"
+                  value={settings.roster.dst}
                   onChange={(e) => updateSettings(e.target.name, "roster", e.target.value)}
                 />
               </div>
@@ -287,6 +343,442 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                 />
               </div>
             )}
+            <h4 className="settings__scoring-title">Kicking</h4>
+            {settings.scoring?.k_fg !== undefined && (
+              <div className="input-containter">
+                <label htmlFor="k_fg">FG</label>
+                <input
+                  className="text--number"
+                  id="k_fg"
+                  name="k_fg"
+                  type="text"
+                  value={settings.scoring.k_fg}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.k_mfg !== undefined && (
+              <div className="input-containter">
+                <label htmlFor="k_mfg">MFG</label>
+                <input
+                  className="text--number"
+                  id="k_mfg"
+                  name="k_mfg"
+                  type="text"
+                  value={settings.scoring.k_mfg}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.k_xpt !== undefined && (
+              <div className="input-containter">
+                <label htmlFor="k_xpt">XPT</label>
+                <input
+                  className="text--number"
+                  id="k_xpt"
+                  name="k_xpt"
+                  type="text"
+                  value={settings.scoring.k_xpt}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            <h4 className="settings__scoring-title">Defense: Sacks, Turnovers, & Scoring</h4>
+            {settings.scoring?.dst_sk !== undefined && (
+              <div className="input-containter">
+                <label htmlFor="dst_sk">SACK</label>
+                <input
+                  className="text--number"
+                  id="dst_sk"
+                  name="dst_sk"
+                  type="text"
+                  value={settings.scoring.dst_sk}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_int !== undefined && (
+              <div className="input-containter">
+                <label htmlFor="dst_int">INT</label>
+                <input
+                  className="text--number"
+                  id="dst_int"
+                  name="dst_int"
+                  type="text"
+                  value={settings.scoring.dst_int}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_fr !== undefined && (
+              <div className="input-containter">
+                <label htmlFor="dst_fr">FR</label>
+                <input
+                  className="text--number"
+                  id="dst_fr"
+                  name="dst_fr"
+                  type="text"
+                  value={settings.scoring.dst_fr}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_ff !== undefined && (
+              <div className="input-containter">
+                <label htmlFor="dst_ff">FF</label>
+                <input
+                  className="text--number"
+                  id="dst_ff"
+                  name="dst_ff"
+                  type="text"
+                  value={settings.scoring.dst_ff}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_td !== undefined && (
+              <div className="input-containter">
+                <label htmlFor="dst_td">TD</label>
+                <input
+                  className="text--number"
+                  id="dst_td"
+                  name="dst_td"
+                  type="text"
+                  value={settings.scoring.dst_td}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_sf !== undefined && (
+              <div className="input-containter">
+                <label htmlFor="dst_sf">SAFE</label>
+                <input
+                  className="text--number"
+                  id="dst_sf"
+                  name="dst_sf"
+                  type="text"
+                  value={settings.scoring.dst_sf}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            <h4 className="settings__scoring-title">Defense: Points Allowed</h4>
+            {settings.scoring?.dst_pa_0 !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_pa_0">
+                  0
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_pa_0"
+                  name="dst_pa_0"
+                  type="text"
+                  value={settings.scoring?.dst_pa_0}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_pa_1_5 !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_pa_1_5">
+                  1-5
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_pa_1_5"
+                  name="dst_pa_1_5"
+                  type="text"
+                  value={settings.scoring?.dst_pa_1_5}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_pa_6_10 !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_pa_6_10">
+                  6-10
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_pa_6_10"
+                  name="dst_pa_6_10"
+                  type="text"
+                  value={settings.scoring?.dst_pa_6_10}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_pa_11_15 !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_pa_11_15">
+                  11-15
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_pa_11_15"
+                  name="dst_pa_11_15"
+                  type="text"
+                  value={settings.scoring?.dst_pa_11_15}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_pa_16_20 !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_pa_16_20">
+                  16-20
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_pa_16_20"
+                  name="dst_pa_16_20"
+                  type="text"
+                  value={settings.scoring?.dst_pa_16_20}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_pa_21_25 !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_pa_21_25">
+                  21-25
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_pa_21_25"
+                  name="dst_pa_21_25"
+                  type="text"
+                  value={settings.scoring?.dst_pa_21_25}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_pa_26_30 !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_pa_26_30">
+                  26-30
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_pa_26_30"
+                  name="dst_pa_26_30"
+                  type="text"
+                  value={settings.scoring?.dst_pa_26_30}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_pa_31_35 !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_pa_31_35">
+                  31-35
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_pa_31_35"
+                  name="dst_pa_31_35"
+                  type="text"
+                  value={settings.scoring?.dst_pa_31_35}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_pa_36_40 !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_pa_36_40">
+                  36-40
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_pa_36_40"
+                  name="dst_pa_36_40"
+                  type="text"
+                  value={settings.scoring?.dst_pa_36_40}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_pa_41_plus !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_pa_41_plus">
+                  40+
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_pa_41_plus"
+                  name="dst_pa_41_plus"
+                  type="text"
+                  value={settings.scoring?.dst_pa_41_plus}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            <h4 className="settings__scoring-title">Defense: Yards Allowed</h4>
+            {settings.scoring?.dst_ya_49 !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_ya_49">
+                  &lt;49
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_ya_49"
+                  name="dst_ya_49"
+                  type="text"
+                  value={settings.scoring?.dst_ya_49}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_ya_50_99 !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_ya_50_99">
+                  50-99
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_ya_50_99"
+                  name="dst_ya_50_99"
+                  type="text"
+                  value={settings.scoring?.dst_ya_50_99}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_ya_100_149 !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_ya_100_149">
+                  100-149
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_ya_100_149"
+                  name="dst_ya_100_149"
+                  type="text"
+                  value={settings.scoring?.dst_ya_100_149}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_ya_150_199 !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_ya_150_199">
+                  150-199
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_ya_150_199"
+                  name="dst_ya_150_199"
+                  type="text"
+                  value={settings.scoring?.dst_ya_150_199}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_ya_200_249 !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_ya_200_249">
+                  200-249
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_ya_200_249"
+                  name="dst_ya_200_249"
+                  type="text"
+                  value={settings.scoring?.dst_ya_200_249}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_ya_250_299 !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_ya_250_299">
+                  250-299
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_ya_250_299"
+                  name="dst_ya_250_299"
+                  type="text"
+                  value={settings.scoring?.dst_ya_250_299}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_ya_300_349 !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_ya_300_349">
+                  300-349
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_ya_300_349"
+                  name="dst_ya_300_349"
+                  type="text"
+                  value={settings.scoring?.dst_ya_300_349}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_ya_350_399 !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_ya_350_399">
+                  350-399
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_ya_350_399"
+                  name="dst_ya_350_399"
+                  type="text"
+                  value={settings.scoring?.dst_ya_350_399}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_ya_400_449 !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_ya_400_449">
+                  400-449
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_ya_400_449"
+                  name="dst_ya_400_449"
+                  type="text"
+                  value={settings.scoring?.dst_ya_400_449}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_ya_450_499 !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_ya_450_499">
+                  450-499
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_ya_450_499"
+                  name="dst_ya_450_499"
+                  type="text"
+                  value={settings.scoring?.dst_ya_450_499}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
+            {settings.scoring?.dst_ya_500_plus !== undefined && (
+              <div className="input-containter">
+                <label className="text--number" htmlFor="dst_ya_500_plus">
+                  500+
+                </label>
+                <input
+                  className="text--number"
+                  id="dst_ya_500_plus"
+                  name="dst_ya_500_plus"
+                  type="text"
+                  value={settings.scoring?.dst_ya_500_plus}
+                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                />
+              </div>
+            )}
             <h4 className="settings__scoring-title">Misc</h4>
             {settings.scoring?.misc_fum !== undefined && (
               <div className="input-containter">
@@ -306,13 +798,15 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
         <div className="app-settings">
           <h2 className="settings__title">App Settings</h2>
           <div className="settings__category-container settings__category-container--full">
-            <div className="switch__container">
-              <label className="switch">
-                <input type="checkbox" checked={settings.misc?.color_mode === "dark" ? true : false} onChange={() => handleColorMode(settings)} />
-                <span className="slider slider--round"></span>
-              </label>
-              <p className="switch__text">{settings.misc?.color_mode} mode</p>
-            </div>
+            {settings.misc?.color_mode !== undefined && (
+              <div className="switch__container switch__container--color-mode">
+                <label className="switch">
+                  <input type="checkbox" checked={settings.misc?.color_mode === "dark" ? true : false} onChange={() => handleColorMode()} />
+                  <span className="slider slider--round"></span>
+                </label>
+                <p className="switch__text switch__text--color-mode">{settings.misc?.color_mode} mode</p>
+              </div>
+            )}
           </div>
           <div className="settings__category-container settings__category-container--full">
             <button
@@ -330,7 +824,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
           </div>
         </div>
       </div>
-      <div className="settings__overlay" onClick={() => handleSettingsMenu(settings)} onTransitionEnd={() => handleSettingsMenuTransition(settings)}></div>
+      <div className="settings__overlay" onClick={() => handleSettingsMenu()} onTransitionEnd={() => handleSettingsMenuTransition()}></div>
     </div>
   );
 }

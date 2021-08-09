@@ -17,7 +17,14 @@
   .list-head {
     margin: 1rem 1.5rem 0;
   }
+  .player-card__position {
+    width: 26px;
+    text-align: center;
+  }
   .player-card__team {
+    flex: 1 1 auto;
+  }
+  .player-card--DST .player-card__name {
     flex: 1 1 auto;
   }
 }
@@ -360,7 +367,7 @@
   }
   .player-card__button svg {
     height: 15px;
-    width: 15px;
+    width: 16px;
   }
 }
 .player-card button svg path {

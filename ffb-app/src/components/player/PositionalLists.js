@@ -19,6 +19,7 @@ export function PositionalLists({
     RB: "rush",
     WR: "rec",
     TE: "rec",
+    DST: "dst1",
   });
 
   //Handle Stats Dropdown
@@ -249,6 +250,107 @@ export function PositionalLists({
                 draftStatus={draftStatus[obj[0]]}
                 updateDraftStatus={updateDraftStatus}
                 displayedStats={displayedStats["TE"]}
+                currentPick={currentPick}
+                setCurrentPick={setCurrentPick}
+              />
+            ))}
+        </ul>
+      </div>
+      <div className="positional-list positional-list__k">
+        <div className="list-head">
+          <h2 className="list-heading">K</h2>
+        </div>
+        <ul className="player-list">
+          {playersTotalPoints
+            .filter((obj) => players[obj[0]]["POSITION"] === "K")
+            .filter((obj) => {
+              ///check if draft status and filter status are in line
+              if ((draftStatus[obj[0]] && playerStatusFilters.drafted) || (!draftStatus[obj[0]] && playerStatusFilters.undrafted)) {
+                //then check if sentiment status and filters are true
+                if (sentimentStatus[obj[0]]) {
+                  let sentiment = sentimentStatus[obj[0]];
+                  return playerStatusFilters[sentiment];
+                } else {
+                  return true;
+                }
+              } else {
+                return false;
+              }
+            })
+            .filter((obj) => {
+              if (playerSearch.toLowerCase() !== "search player" && playerSearch !== "") {
+                return players[obj[0]]["PLAYER"].toLowerCase().includes(playerSearch.toLowerCase());
+              } else {
+                return true;
+              }
+            })
+            .map((obj) => (
+              <PlayerCard
+                key={obj[0]}
+                playerId={obj[0]}
+                rank={playersTotalPoints.findIndex((el) => el[0] === obj[0]) + 1}
+                playerTotalPoints={obj[1]}
+                player={players[obj[0]]["PLAYER"]}
+                stats={players[obj[0]]}
+                sentimentStatus={sentimentStatus[obj[0]]}
+                draftStatus={draftStatus[obj[0]]}
+                updateDraftStatus={updateDraftStatus}
+                currentPick={currentPick}
+                setCurrentPick={setCurrentPick}
+              />
+            ))}
+        </ul>
+      </div>
+      <div className="positional-list positional-list__dst">
+        <div className="list-head">
+          <h2 className="list-heading">DST</h2>
+          <div className="stats-dropdrown__container">
+            <label htmlFor="dst-select" className="visually-hidden">
+              Select Wide Receiver Stats
+            </label>
+            <select className="stats-dropdrown" dir="rtl" name="DST" id="dst-select" value={displayedStats["dst"]} onChange={(e) => handleStatsDropdown(e)}>
+              <option value="dst1">Sacks & Turnovers</option>
+              <option value="dst2">Scoring & Allowances</option>
+            </select>
+            <IconDownCaret />
+          </div>
+        </div>
+        <ul className="player-list">
+          {playersTotalPoints
+            .filter((obj) => players[obj[0]]["POSITION"] === "DST")
+            .filter((obj) => {
+              ///check if draft status and filter status are in line
+              if ((draftStatus[obj[0]] && playerStatusFilters.drafted) || (!draftStatus[obj[0]] && playerStatusFilters.undrafted)) {
+                //then check if sentiment status and filters are true
+                if (sentimentStatus[obj[0]]) {
+                  let sentiment = sentimentStatus[obj[0]];
+                  return playerStatusFilters[sentiment];
+                } else {
+                  return true;
+                }
+              } else {
+                return false;
+              }
+            })
+            .filter((obj) => {
+              if (playerSearch.toLowerCase() !== "search player" && playerSearch !== "") {
+                return players[obj[0]]["PLAYER"].toLowerCase().includes(playerSearch.toLowerCase());
+              } else {
+                return true;
+              }
+            })
+            .map((obj) => (
+              <PlayerCard
+                key={obj[0]}
+                playerId={obj[0]}
+                rank={playersTotalPoints.findIndex((el) => el[0] === obj[0]) + 1}
+                playerTotalPoints={obj[1]}
+                player={players[obj[0]]["PLAYER"]}
+                stats={players[obj[0]]}
+                sentimentStatus={sentimentStatus[obj[0]]}
+                draftStatus={draftStatus[obj[0]]}
+                updateDraftStatus={updateDraftStatus}
+                displayedStats={displayedStats["DST"]}
                 currentPick={currentPick}
                 setCurrentPick={setCurrentPick}
               />

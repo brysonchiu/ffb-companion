@@ -20,7 +20,9 @@ export function PlayerCard({
 }) {
   return (
     <li
-      className={`player-card${draftStatus ? " player-card--drafted" : ""}${sentimentStatus ? " player-card--" + sentimentStatus : ""}`}
+      className={`player-card${draftStatus ? " player-card--drafted" : ""}${sentimentStatus ? " player-card--" + sentimentStatus : ""}${
+        position ? " player-card--" + position : ""
+      }`}
       onClick={() => {
         if (draftStatus) {
           setCurrentPick(checkPick(currentPick - 1));
@@ -35,7 +37,7 @@ export function PlayerCard({
       <div className="player-card__name">{player}</div>
       {team && <div className="player-card__team">{team}</div>}
       {overallPoints !== undefined && <div className="player-card__pnts text--number">{roundNumber(overallPoints)}</div>}
-      {stats && stats["PASSING ATT"] && stats["PASSING CMP"] && stats["PASSING INTS"] && stats["PASSING TDS"] && stats["PASSING YDS"] && (
+      {stats?.["PASSING ATT"] && stats?.["PASSING CMP"] && stats?.["PASSING INTS"] && stats?.["PASSING TDS"] && stats?.["PASSING YDS"] && (
         <table className={`stats-table stats-table--pass${displayedStats !== "pass" ? " stats-table--hidden" : ""}`}>
           <caption className="visually-hidden">Passing Stats</caption>
           <thead>
@@ -60,7 +62,7 @@ export function PlayerCard({
           </tbody>
         </table>
       )}
-      {stats && stats["RUSHING ATT"] && stats["RUSHING TDS"] && stats["RUSHING YDS"] && (
+      {stats?.["RUSHING ATT"] && stats?.["RUSHING TDS"] && stats?.["RUSHING YDS"] && (
         <table className={`stats-table stats-table--rush${displayedStats !== "rush" ? " stats-table--hidden" : ""}`}>
           <caption className="visually-hidden">Rushing Stats</caption>
           <thead>
@@ -81,7 +83,7 @@ export function PlayerCard({
           </tbody>
         </table>
       )}
-      {stats && stats["RECEIVING REC"] && stats["RECEIVING TDS"] && stats["RECEIVING YDS"] && (
+      {stats?.["RECEIVING REC"] && stats?.["RECEIVING TDS"] && stats?.["RECEIVING YDS"] && (
         <table className={`stats-table stats-table--rec${displayedStats !== "rec" ? " stats-table--hidden" : ""}`}>
           <caption className="visually-hidden">Receiving Stats</caption>
           <thead>
@@ -102,7 +104,7 @@ export function PlayerCard({
           </tbody>
         </table>
       )}
-      {stats && stats["MISC FL"] && (
+      {stats?.["MISC FL"] && (
         <table className={`stats-table stats-table--misc${displayedStats !== "misc" ? " stats-table--hidden" : ""}`}>
           <caption className="visually-hidden">Miscellaneous Stats</caption>
           <thead>
@@ -115,6 +117,73 @@ export function PlayerCard({
             <tr>
               <td className="stats-table__total-points">{roundNumber(playerTotalPoints)}</td>
               <td>{roundNumber(stats["MISC FL"])}</td>
+            </tr>
+          </tbody>
+        </table>
+      )}
+      {stats?.["K FG"] && stats?.["K FGA"] && stats?.["K XPT"] && (
+        <table className="stats-table stats-table--k">
+          <caption className="visually-hidden">Kicking Stats</caption>
+          <thead>
+            <tr>
+              <th className="stats-table__total-points">PNTS</th>
+              <th>FG</th>
+              <th>FGA</th>
+              <th>XPT</th>
+            </tr>
+          </thead>
+          <tbody className="text--number">
+            <tr>
+              <td className="stats-table__total-points">{roundNumber(playerTotalPoints)}</td>
+              <td>{roundNumber(stats["K FG"])}</td>
+              <td>{roundNumber(stats["K FGA"])}</td>
+              <td>{roundNumber(stats["K XPT"])}</td>
+            </tr>
+          </tbody>
+        </table>
+      )}
+      {stats?.["DST SACK"] && stats?.["DST INT"] && stats?.["DST FR"] && stats?.["DST FF"] && (
+        <table className={`stats-table stats-table--dst${displayedStats !== "dst1" ? " stats-table--hidden" : ""}`}>
+          <caption className="visually-hidden">Defense Stats</caption>
+          <thead>
+            <tr>
+              <th className="stats-table__total-points">PNTS</th>
+              <th>SK</th>
+              <th>INT</th>
+              <th>FR</th>
+              <th>FF</th>
+            </tr>
+          </thead>
+          <tbody className="text--number">
+            <tr>
+              <td className="stats-table__total-points">{roundNumber(playerTotalPoints)}</td>
+              <td>{roundNumber(stats["DST SACK"])}</td>
+              <td>{roundNumber(stats["DST INT"])}</td>
+              <td>{roundNumber(stats["DST FR"])}</td>
+              <td>{roundNumber(stats["DST FF"])}</td>
+            </tr>
+          </tbody>
+        </table>
+      )}
+      {stats?.["DST TD"] && stats?.["DST SAFETY"] && stats?.["DST PA"] && stats?.["DST YDS AGN"] && (
+        <table className={`stats-table stats-table--dst${displayedStats !== "dst2" ? " stats-table--hidden" : ""}`}>
+          <caption className="visually-hidden">Defense Stats</caption>
+          <thead>
+            <tr>
+              <th className="stats-table__total-points">PNTS</th>
+              <th>TD</th>
+              <th>SF</th>
+              <th>PA</th>
+              <th>YA</th>
+            </tr>
+          </thead>
+          <tbody className="text--number">
+            <tr>
+              <td className="stats-table__total-points">{roundNumber(playerTotalPoints)}</td>
+              <td>{roundNumber(stats["DST TD"])}</td>
+              <td>{roundNumber(stats["DST SAFETY"])}</td>
+              <td>{roundNumber(stats["DST PA"])}</td>
+              <td>{roundNumber(stats["DST YDS AGN"])}</td>
             </tr>
           </tbody>
         </table>

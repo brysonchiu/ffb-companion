@@ -3,7 +3,7 @@ const cheerio = require("cheerio");
 const fs = require("fs");
 
 const url = "https://www.fantasypros.com/nfl/projections/";
-const urlPosisitons = ["qb", "rb", "wr", "te"];
+const urlPosisitons = ["qb", "rb", "wr", "te", "k", "dst"];
 const urlSuffix = ".php?week=draft";
 const statsObject = {};
 
@@ -22,18 +22,19 @@ function getStats() {
           tableBodyRows.each(function () {
             const playerId = $(this).attr("class").match(/\d+/g)[0];
             const td = $(this).find("td");
-            const statsObj = {};
+            const playerStatsObject = {};
+            //loop over stat cells, except the last cell, which is total FPTS which is calculated in the app
             for (i = 0; i < td.length - 1; i++) {
               if (i == 0) {
-                statsObj.PLAYER = td[i].children[0].children[0].data;
-                statsObj.POSITION = urlPosisiton.toUpperCase();
-                statsObj.TEAM = td[i].children[1].data.trim();
+                playerStatsObject.PLAYER = td[i].children[0].children[0].data;
+                playerStatsObject.POSITION = urlPosisiton.toUpperCase();
+                if (urlPosisiton != "dst") playerStatsObject.TEAM = td[i].children[1].data.trim();
               } else {
                 headerValue = headersTable[i];
-                statsObj[headerValue] = td[i].children[0].data.trim();
+                playerStatsObject[headerValue] = td[i].children[0].data.trim();
               }
             }
-            statsObject[playerId] = statsObj;
+            statsObject[playerId] = playerStatsObject;
           });
         }
 
@@ -41,9 +42,9 @@ function getStats() {
         function parseTableHeaders() {
           let statsTypeHeaders, attrHeaders;
           for (i = 0; i < tableHead.length; i++) {
-            if (i == 0) {
+            if (tableHead.length === 2 && i === 0) {
               statsTypeHeaders = getStatsTypeHeaders(tableHead[i]);
-            } else if (i == 1) {
+            } else if (tableHead.length === 1 || i === 1) {
               attrHeaders = getAttrHeaders(tableHead[i]);
             }
           }
@@ -55,6 +56,7 @@ function getStats() {
           const headingStatsTypeCells = $(headerRow).find("td");
           const headingStatsTypeTable = [];
           let headingStatsTypeCell, headingStatsTypeCellSpan;
+          //for each category, get the name and cellspan
           headingStatsTypeCells.each(function () {
             if ($(this).text().trim()) {
               headingStatsTypeCell = $(this).text().trim();
@@ -64,7 +66,7 @@ function getStats() {
             } else {
               headingStatsTypeCellSpan = 1;
             }
-
+            //push an array of objects containing category and cellspan
             headingStatsTypeTable.push({
               headingStatsTypeCell,
               headingStatsTypeCellSpan,
@@ -89,22 +91,33 @@ function getStats() {
           return headingAttrTable;
         }
 
-        // Combines stat categories with overall categories
+        // Combines headers: categories headers with stat headers
         function combineTableHeaders(statsTypeHeaders, attrHeaders) {
           let cellSpan = 0;
           let heading;
-          for (i = 0; i < statsTypeHeaders.length; i++) {
-            prevCellSpan = cellSpan;
-            cellSpan = cellSpan + statsTypeHeaders[i].headingStatsTypeCellSpan;
-            for (n = prevCellSpan; n < cellSpan; n++) {
-              if (!statsTypeHeaders[i].headingStatsTypeCell) {
-                heading = attrHeaders[n].headingAttrCell;
-              } else {
-                heading = statsTypeHeaders[i].headingStatsTypeCell + " " + attrHeaders[n].headingAttrCell;
+          //if there are stat categories (everyone but kickers, dst)
+          if (statsTypeHeaders) {
+            //loop over each stat category
+            for (i = 0; i < statsTypeHeaders.length; i++) {
+              prevCellSpan = cellSpan;
+              cellSpan = cellSpan + statsTypeHeaders[i].headingStatsTypeCellSpan;
+              //using a running count of the cell spans, loop over the stats headers
+              for (n = prevCellSpan; n < cellSpan; n++) {
+                if (!statsTypeHeaders[i].headingStatsTypeCell) {
+                  heading = attrHeaders[n].headingAttrCell;
+                } else {
+                  heading = statsTypeHeaders[i].headingStatsTypeCell + " " + attrHeaders[n].headingAttrCell;
+                }
+                if (heading !== "MISC FPTS") {
+                  headersTable.push(heading);
+                }
               }
-              if (heading !== "MISC FPTS") {
-                headersTable.push(heading);
-              }
+            }
+            //if there are no stat categories (kickers, dst), loop over just the stats
+          } else {
+            for (n = 0; n < attrHeaders.length; n++) {
+              heading = urlPosisiton.toUpperCase() + " " + attrHeaders[n].headingAttrCell;
+              headersTable.push(heading);
             }
           }
           return headersTable;
@@ -127,7 +140,7 @@ function jsonOutput(statsObject) {
       console.log("An error occured while writing JSON Object to File.");
       return console.log(err);
     }
-    console.log("JSON file has been saved.");
+    console.log("Stats file has been saved.");
   });
 }
 getStats();
