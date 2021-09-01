@@ -5,13 +5,78 @@ import { PositionalLists } from "./components/player/PositionalLists.js";
 import { Settings } from "./components/Settings.js";
 import { MobileMessage } from "./components/MobileMessage.js";
 import { parseStringToFloat, calculateTotalPoints } from "./helpers.js";
+import { vbdPointRankings } from "./rostersAndRanks.js";
 
 function App() {
   const [players, setPlayers] = useState({});
   const [draftStatus, setDraftStatus] = useState({});
   const [sentimentStatus, setSentimentStatus] = useState({});
   const [playerSearch, setPlayerSearch] = useState("");
-  const [settings, setSettings] = useState({});
+  const [settings, setSettings] = useState({
+    general: {
+      teams: 12,
+      user_pick: 1,
+      flex_te: true,
+      flex_qb: false,
+    },
+    roster: {
+      qb: 1,
+      rb: 2,
+      wr: 2,
+      te: 1,
+      k: 1,
+      dst: 1,
+      flex: 1,
+      bench: 7,
+    },
+    scoring: {
+      pass_yrds: 0.04,
+      pass_td: 6,
+      pass_comp: 0,
+      pass_int: -2,
+      rush_yrds: 0.1,
+      rush_td: 6,
+      rec_yrds: 0.1,
+      rec_td: 6,
+      rec_rec: 1,
+      k_fg: 4,
+      k_mfg: -1,
+      k_xpt: 1,
+      dst_sk: 1,
+      dst_int: 2,
+      dst_fr: 2,
+      dst_ff: 0,
+      dst_td: 6,
+      dst_sf: 2,
+      dst_pa_0: 5,
+      dst_pa_1_5: 4,
+      dst_pa_6_10: 3,
+      dst_pa_11_15: 1,
+      dst_pa_16_20: 0,
+      dst_pa_21_25: 0,
+      dst_pa_26_30: -1,
+      dst_pa_31_35: -1,
+      dst_pa_36_40: -3,
+      dst_pa_40_plus: -5,
+      dst_ya_49: 0,
+      dst_ya_50_99: 0,
+      dst_ya_100_149: 0,
+      dst_ya_150_199: 0,
+      dst_ya_200_249: 0,
+      dst_ya_250_299: 0,
+      dst_ya_300_349: 0,
+      dst_ya_350_399: 0,
+      dst_ya_400_449: 0,
+      dst_ya_450_499: 0,
+      dst_ya_500_plus: 0,
+      misc_fum: -2,
+    },
+    misc: {
+      menu_open: false,
+      menu_transition: false,
+      color_mode: "light",
+    },
+  });
   const [playerStatusFilters, setPlayerStatusFilters] = useState({
     undrafted: true,
     drafted: true,
@@ -21,7 +86,7 @@ function App() {
   });
   const [currentPick, setCurrentPick] = useState(1);
   const [playersTotalPoints, setPlayersTotalPoints] = useState([]);
-  const [startingPlayers, setStartingPlayers] = useState([]);
+  const [vbdRanks, setVbdRanks] = useState({});
 
   //init player stats and set default settings
   useEffect(() => {
@@ -52,84 +117,15 @@ function App() {
     if (localStorage.getItem("currentPick")) setCurrentPick(parseStringToFloat(localStorage.getItem("currentPick")));
 
     //Set default settings
-    setSettings(
-      localStorage.getItem("settings")
-        ? JSON.parse(localStorage.getItem("settings"))
-        : {
-            general: {
-              teams: 12,
-              user_pick: 1,
-              flex_te: false,
-              flex_qb: false,
-            },
-            roster: {
-              qb: 1,
-              rb: 2,
-              wr: 2,
-              te: 1,
-              k: 1,
-              dst: 1,
-              flex: 1,
-              bench: 7,
-            },
-            scoring: {
-              pass_yrds: 0.04,
-              pass_td: 6,
-              pass_comp: 0,
-              pass_int: -2,
-              rush_yrds: 0.1,
-              rush_td: 6,
-              rec_yrds: 0.1,
-              rec_td: 6,
-              rec_rec: 1,
-              k_fg: 4,
-              k_mfg: -1,
-              k_xpt: 1,
-              dst_sk: 1,
-              dst_int: 2,
-              dst_fr: 2,
-              dst_ff: 0,
-              dst_td: 6,
-              dst_sf: 2,
-              dst_pa_0: 5,
-              dst_pa_1_5: 4,
-              dst_pa_6_10: 3,
-              dst_pa_11_15: 1,
-              dst_pa_16_20: 0,
-              dst_pa_21_25: 0,
-              dst_pa_26_30: -1,
-              dst_pa_31_35: -1,
-              dst_pa_36_40: -3,
-              dst_pa_40_plus: -5,
-              dst_ya_49: 0,
-              dst_ya_50_99: 0,
-              dst_ya_100_149: 0,
-              dst_ya_150_199: 0,
-              dst_ya_200_249: 0,
-              dst_ya_250_299: 0,
-              dst_ya_300_349: 0,
-              dst_ya_350_399: 0,
-              dst_ya_400_449: 0,
-              dst_ya_450_499: 0,
-              dst_ya_500_plus: 0,
-              misc_fum: -2,
-            },
-            misc: {
-              menu_open: false,
-              menu_transition: false,
-              color_mode: "light",
-            },
-          }
-    );
+    if (localStorage.getItem("settings")) setSettings(JSON.parse(localStorage.getItem("settings")));
   }, []);
 
   // Calculate players' total points and rank (sort)
   useEffect(() => {
     const updateTotalPoints = (players, scoring) => {
-      const fantasyPoints = [];
-      Object.keys(players).map((playerId) => {
+      const fantasyPoints = Object.keys(players).map((playerId) => {
         const totalPoints = calculateTotalPoints(scoring, players, parseInt(playerId));
-        return fantasyPoints.push([parseInt(playerId), totalPoints]);
+        return [parseInt(playerId), totalPoints];
       });
       //Rank, aka sort players by points
       fantasyPoints.sort((playerA, playerB) => {
@@ -182,55 +178,26 @@ function App() {
     players,
   ]);
 
-  // Set active/bench players
+  // Set active, bench, and undrafted players
   useEffect(() => {
-    const startingPlayers = [];
-    const positionRunningCount = {
-      qb: 0,
-      rb: 0,
-      wr: 0,
-      te: 0,
-      k: 0,
-      dst: 0,
-      flex: 0,
-      // bench: 0,
-    };
-    //check if all starters are accounted for
-    const startersNotFilled = (positionRunningCount) => {
-      return Object.keys(positionRunningCount).some((position) => positionRunningCount[position] < settings.roster[position] * settings.general.teams);
-    };
-    const isFlexedPosition = (playerPosition) => {
-      if (playerPosition === "rb" || playerPosition === "wr") {
-        return true;
-      } else if (settings.general.flex_te && playerPosition === "te") {
-        return true;
-      } else if (settings.general.flex_qb && playerPosition === "qb") {
-        return true;
-      } else {
-        return false;
-      }
-    };
-    for (let i = 0; i < playersTotalPoints.length; i++) {
-      console.log(startersNotFilled(positionRunningCount));
-      //ff the starters are already filled, break
-      if (!startersNotFilled(positionRunningCount)) {
-        console.log("break out of for statement");
-        break;
-      }
-      const playerId = playersTotalPoints[i][0];
-      const playerPosition = players[playerId]["POSITION"].toLowerCase();
-      // if the running count for the position is not maxed, add the player to the startingPlayers array.
-      // else if the player is an eligable flex option, add the player to the startingPlayers array.
-      if (positionRunningCount[playerPosition] < settings.roster[playerPosition] * settings.general.teams) {
-        startingPlayers.push(playerId);
-        positionRunningCount[playerPosition] = positionRunningCount[playerPosition] + 1;
-      } else if (isFlexedPosition(playerPosition) && positionRunningCount.flex < settings.roster.flex * settings.general.teams) {
-        startingPlayers.push(playerId);
-        positionRunningCount.flex = positionRunningCount.flex + 1;
-      }
-    }
-    setStartingPlayers(startingPlayers);
+    if (
+      Object.keys(players).length > 0 &&
+      playersTotalPoints.length > 0 &&
+      settings.general.teams !== undefined &&
+      settings.general.flex_te !== undefined &&
+      settings.general.flex_qb !== undefined &&
+      settings.roster.qb !== undefined &&
+      settings.roster.rb !== undefined &&
+      settings.roster.wr !== undefined &&
+      settings.roster.te !== undefined &&
+      settings.roster.k !== undefined &&
+      settings.roster.dst !== undefined &&
+      settings.roster.flex !== undefined &&
+      settings.roster.bench !== undefined
+    )
+      setVbdRanks(vbdPointRankings(settings, players, playersTotalPoints));
   }, [
+    players,
     playersTotalPoints,
     settings.general?.teams,
     settings.general?.flex_te,
@@ -301,23 +268,27 @@ function App() {
         currentPick={currentPick}
         setCurrentPick={setCurrentPick}
       />
-      <OverallList
-        players={players}
-        playersTotalPoints={playersTotalPoints}
-        sentimentStatus={sentimentStatus}
-        updateSentimentStatus={updateSentimentStatus}
-        draftStatus={draftStatus}
-        updateDraftStatus={updateDraftStatus}
-        playerSearch={playerSearch}
-        settings={settings}
-        currentPick={currentPick}
-        setCurrentPick={setCurrentPick}
-        playerStatusFilters={playerStatusFilters}
-        setPlayerStatusFilters={setPlayerStatusFilters}
-      />
+      {vbdRanks?.all && (
+        <OverallList
+          players={players}
+          playersTotalPoints={playersTotalPoints}
+          vbdRanks={vbdRanks.all}
+          sentimentStatus={sentimentStatus}
+          updateSentimentStatus={updateSentimentStatus}
+          draftStatus={draftStatus}
+          updateDraftStatus={updateDraftStatus}
+          playerSearch={playerSearch}
+          settings={settings}
+          currentPick={currentPick}
+          setCurrentPick={setCurrentPick}
+          playerStatusFilters={playerStatusFilters}
+          setPlayerStatusFilters={setPlayerStatusFilters}
+        />
+      )}
       <PositionalLists
         players={players}
         playersTotalPoints={playersTotalPoints}
+        vbdRanks={vbdRanks}
         sentimentStatus={sentimentStatus}
         draftStatus={draftStatus}
         updateDraftStatus={updateDraftStatus}

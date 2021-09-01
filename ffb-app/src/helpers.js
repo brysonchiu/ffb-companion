@@ -30,6 +30,8 @@ export function rosterSize(settings) {
     parseStringToFloat(settings.roster?.rb) +
     parseStringToFloat(settings.roster?.wr) +
     parseStringToFloat(settings.roster?.te) +
+    parseStringToFloat(settings.roster?.k) +
+    parseStringToFloat(settings.roster?.dst) +
     parseStringToFloat(settings.roster?.flex) +
     parseStringToFloat(settings.roster?.bench)
   );

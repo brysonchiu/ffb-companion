@@ -117,6 +117,7 @@
   position: relative;
   font-weight: 600;
   transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  @extend .small1;
   .app--dark & {
     border-color: $primary;
   }

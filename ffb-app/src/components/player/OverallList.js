@@ -5,6 +5,7 @@ import { rosterSize, parseStringToFloat } from "../../helpers.js";
 export function OverallList({
   players,
   playersTotalPoints,
+  vbdRanks,
   sentimentStatus,
   updateSentimentStatus,
   draftStatus,
@@ -16,8 +17,8 @@ export function OverallList({
   playerStatusFilters,
   setPlayerStatusFilters,
 }) {
-  const filteredPlayers = (players, playersTotalPoints, playerSearch) => {
-    return playersTotalPoints
+  const filteredPlayers = (players, vbdRanks, playerSearch) => {
+    return vbdRanks
       .filter((obj) => {
         ///check if draft status and filter status are in line
         if ((draftStatus[obj[0]] && playerStatusFilters.drafted) || (!draftStatus[obj[0]] && playerStatusFilters.undrafted)) {
@@ -33,7 +34,12 @@ export function OverallList({
         }
       })
       .filter((obj) => {
-        if (playerSearch !== "") {
+        if (playerSearch !== "" && players[obj[0]]["TEAM"]) {
+          return (
+            players[obj[0]]["PLAYER"].toLowerCase().includes(playerSearch.toLowerCase()) ||
+            players[obj[0]]["TEAM"].toLowerCase().includes(playerSearch.toLowerCase())
+          );
+        } else if (playerSearch !== "") {
           return players[obj[0]]["PLAYER"].toLowerCase().includes(playerSearch.toLowerCase());
         } else {
           return true;
@@ -51,11 +57,11 @@ export function OverallList({
         player = playerLoopReturn[1];
         rounds.push(
           <React.Fragment key={round}>
-            <h3 className="player-list__round-title">
+            <h3 className="player-list__title">
               {round === rosterSize(settings) + 1 ? `Undrafted` : `Round `}
               <span className="text--number">{round === rosterSize(settings) + 1 ? null : round}</span>
             </h3>
-            <ul className="player-list__round-list">{playerLoopReturn[0]}</ul>
+            <ul className="player-list__list">{playerLoopReturn[0]}</ul>
           </React.Fragment>
         );
       }
@@ -72,18 +78,18 @@ export function OverallList({
         //If rank is greater than the first pick of the round, and
         //A) If it is not the undrafted round and the rank is less than or eq to the last pick of the round, or
         //B) If it is the undrafted round
-        playersTotalPoints.findIndex((el) => el[0] === filteredPlayers[i]?.[0]) + 1 > (round - 1) * parseStringToFloat(settings.general?.teams) &&
+        vbdRanks.findIndex((el) => el[0] === filteredPlayers[i]?.[0]) + 1 > (round - 1) * parseStringToFloat(settings.general?.teams) &&
         ((round !== rosterSize(settings) + 1 &&
-          playersTotalPoints.findIndex((el) => el[0] === filteredPlayers[i]?.[0]) + 1 <= round * parseStringToFloat(settings.general?.teams)) ||
+          vbdRanks.findIndex((el) => el[0] === filteredPlayers[i]?.[0]) + 1 <= round * parseStringToFloat(settings.general?.teams)) ||
           round === rosterSize(settings) + 1)
       ) {
         playersSplitIntoRounds.push(
           <PlayerCard
             key={filteredPlayers[i]?.[0]}
             playerId={filteredPlayers[i]?.[0]}
-            rank={playersTotalPoints.findIndex((el) => el[0] === filteredPlayers[i]?.[0]) + 1}
+            rank={vbdRanks.findIndex((el) => el[0] === filteredPlayers[i]?.[0]) + 1}
             team={players[filteredPlayers[i]?.[0]]?.["TEAM"]}
-            overallPoints={filteredPlayers[i]?.[1]}
+            overallPoints={playersTotalPoints.find((el) => el[0] === filteredPlayers[i]?.[0])?.[1]}
             position={players[filteredPlayers[i]?.[0]]?.["POSITION"]}
             player={players[filteredPlayers[i]?.[0]]?.["PLAYER"]}
             sentimentStatus={sentimentStatus[filteredPlayers[i]?.[0]]}
@@ -121,7 +127,7 @@ export function OverallList({
           ))}
         </fieldset>
       </div>
-      <div className="player-list">{roundLoop(filteredPlayers(players, playersTotalPoints, playerSearch), settings)}</div>
+      <div className="player-list">{roundLoop(filteredPlayers(players, vbdRanks, playerSearch), settings)}</div>
     </div>
   );
 }
