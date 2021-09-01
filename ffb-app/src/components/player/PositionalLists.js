@@ -187,13 +187,16 @@ export function PositionalLists({
 
   return (
     <div className="positional-list__container">
-      {Object.keys(displayedStats).map((position) => {
-        const posLowerCase = position.toLowerCase();
-        if (
-          vbdRanks?.["starters"]?.filter((obj) => players?.[obj?.[0]]?.["POSITION"] === position).length > 0 ||
-          vbdRanks?.["bench"]?.filter((obj) => players?.[obj?.[0]]?.["POSITION"] === position).length > 0 ||
-          vbdRanks?.["undrafted"]?.filter((obj) => players?.[obj?.[0]]?.["POSITION"] === position).length > 0
-        ) {
+      {Object.keys(displayedStats)
+        .filter((position) => {
+          return (
+            vbdRanks?.["starters"]?.filter((obj) => players?.[obj?.[0]]?.["POSITION"] === position).length > 0 ||
+            vbdRanks?.["bench"]?.filter((obj) => players?.[obj?.[0]]?.["POSITION"] === position).length > 0 ||
+            vbdRanks?.["undrafted"]?.filter((obj) => players?.[obj?.[0]]?.["POSITION"] === position).length > 0
+          );
+        })
+        .map((position) => {
+          const posLowerCase = position.toLowerCase();
           return (
             <div key={posLowerCase} className={`positional-list positional-list__${posLowerCase}`}>
               <div className="list-head">
@@ -209,8 +212,7 @@ export function PositionalLists({
               )}
             </div>
           );
-        }
-      })}
+        })}
     </div>
   );
 }

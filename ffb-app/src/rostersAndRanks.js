@@ -196,9 +196,9 @@ function getBench(fauxBench, starters, settings, players, playersTotalPoints) {
   const nonStartingPlayers = playersTotalPoints.filter((obj) => !starters.startingPlayers.includes(obj[0]));
 
   // get the bench point differential for all positions
-  const totalbenchPositionalPointDifferential = Object.keys(fauxBench.pointDifferential).reduce((accumulator, currentValue) => {
-    return accumulator + fauxBench.pointDifferential[currentValue];
-  }, 0);
+  // const totalbenchPositionalPointDifferential = Object.keys(fauxBench.pointDifferential).reduce((accumulator, currentValue) => {
+  //   return accumulator + fauxBench.pointDifferential[currentValue];
+  // }, 0);
 
   // calculate the VBD points for the bench players.  This is used to determine the bench players rostered.
   function calculatedVbdBenchPoints(playerPoints, playerPosition) {

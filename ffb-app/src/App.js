@@ -134,6 +134,7 @@ function App() {
       setPlayersTotalPoints(fantasyPoints);
     };
     updateTotalPoints(players, settings.scoring);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     settings.scoring?.misc_fum,
     settings.scoring?.pass_comp,
@@ -196,6 +197,7 @@ function App() {
       settings.roster.bench !== undefined
     )
       setVbdRanks(vbdPointRankings(settings, players, playersTotalPoints));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     players,
     playersTotalPoints,
