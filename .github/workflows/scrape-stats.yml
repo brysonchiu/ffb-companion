@@ -1,11 +1,11 @@
 name: scrape-stats
 on:
   schedule:
-    # Every day of August @ 3:30am EST
-    - cron: '0 5 * 8 *'
-    # Days 1-15 of September @ 3:30am EST
+    # Every day of August @ 3:30am EST (7:30 UTC)
+    - cron: '30 7 * 8 *'
+    # Days 1-15 of September @ 3:30am EST (7:30 UTC)
     - cron: '30 7 1-15 9 *'
-    # Every Tuesday of all other months @ 3:30am EST
+    # Every Tuesday of all other months @ 3:30am EST (7:30 UTC)
     - cron: '30 7 * 1-7,10-12 2'
 jobs:
   scrape-stats:
