@@ -20,5 +20,8 @@ jobs:
         with:
           node-version: 16
           check-latest: true
-          cache-dependency-path: package-lock.json
-      - run: node scraper.js
+          cache: 'npm'
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Scraper Script
+        run: node scraper.js
