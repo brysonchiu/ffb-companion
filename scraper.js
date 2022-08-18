@@ -1,10 +1,10 @@
-const axios = require("axios");
-const cheerio = require("cheerio");
-const fs = require("fs");
+const axios = require('axios');
+const cheerio = require('cheerio');
+const fs = require('fs');
 
-const url = "https://www.fantasypros.com/nfl/projections/";
-const urlPosisitons = ["qb", "rb", "wr", "te", "k", "dst"];
-const urlSuffix = ".php?week=draft";
+const url = 'https://www.fantasypros.com/nfl/projections/';
+const urlPosisitons = ['qb', 'rb', 'wr', 'te', 'k', 'dst'];
+const urlSuffix = '.php?week=draft';
 const statsObject = {};
 
 function getStats() {
@@ -13,22 +13,23 @@ function getStats() {
       .then((response) => {
         const html = response.data;
         const $ = cheerio.load(html);
-        const tableBodyRows = $("#data > tbody > tr");
-        const tableHead = $("#data > thead > tr");
+        const tableBodyRows = $('#data > tbody > tr');
+        const tableHead = $('#data > thead > tr');
         const headersTable = [];
 
         //Get player stats and combines it with headers
         function getplayerInfo() {
           tableBodyRows.each(function () {
-            const playerId = $(this).attr("class").match(/\d+/g)[0];
-            const td = $(this).find("td");
+            const playerId = $(this).attr('class').match(/\d+/g)[0];
+            const td = $(this).find('td');
             const playerStatsObject = {};
             //loop over stat cells, except the last cell, which is total FPTS which is calculated in the app
             for (i = 0; i < td.length - 1; i++) {
               if (i == 0) {
                 playerStatsObject.PLAYER = td[i].children[0].children[0].data;
                 playerStatsObject.POSITION = urlPosisiton.toUpperCase();
-                if (urlPosisiton != "dst") playerStatsObject.TEAM = td[i].children[1].data.trim();
+                if (urlPosisiton != 'dst')
+                  playerStatsObject.TEAM = td[i].children[1].data.trim();
               } else {
                 headerValue = headersTable[i];
                 playerStatsObject[headerValue] = td[i].children[0].data.trim();
@@ -53,7 +54,7 @@ function getStats() {
 
         //Returns a table with overall categories (passing, recieving, rushing, misc) and their cell spans
         function getStatsTypeHeaders(headerRow) {
-          const headingStatsTypeCells = $(headerRow).find("td");
+          const headingStatsTypeCells = $(headerRow).find('td');
           const headingStatsTypeTable = [];
           let headingStatsTypeCell, headingStatsTypeCellSpan;
           //for each category, get the name and cellspan
@@ -77,7 +78,7 @@ function getStats() {
 
         //Returns a table with stat categories (Rec, Tds, Tds, etc)
         function getAttrHeaders(headerRow) {
-          const headingAttrCells = $(headerRow).find("th");
+          const headingAttrCells = $(headerRow).find('th');
           const headingAttrTable = [];
           let headingAttrCell;
           headingAttrCells.each(function () {
@@ -100,15 +101,19 @@ function getStats() {
             //loop over each stat category
             for (i = 0; i < statsTypeHeaders.length; i++) {
               prevCellSpan = cellSpan;
-              cellSpan = cellSpan + statsTypeHeaders[i].headingStatsTypeCellSpan;
+              cellSpan =
+                cellSpan + statsTypeHeaders[i].headingStatsTypeCellSpan;
               //using a running count of the cell spans, loop over the stats headers
               for (n = prevCellSpan; n < cellSpan; n++) {
                 if (!statsTypeHeaders[i].headingStatsTypeCell) {
                   heading = attrHeaders[n].headingAttrCell;
                 } else {
-                  heading = statsTypeHeaders[i].headingStatsTypeCell + " " + attrHeaders[n].headingAttrCell;
+                  heading =
+                    statsTypeHeaders[i].headingStatsTypeCell +
+                    ' ' +
+                    attrHeaders[n].headingAttrCell;
                 }
-                if (heading !== "MISC FPTS") {
+                if (heading !== 'MISC FPTS') {
                   headersTable.push(heading);
                 }
               }
@@ -116,7 +121,10 @@ function getStats() {
             //if there are no stat categories (kickers, dst), loop over just the stats
           } else {
             for (n = 0; n < attrHeaders.length; n++) {
-              heading = urlPosisiton.toUpperCase() + " " + attrHeaders[n].headingAttrCell;
+              heading =
+                urlPosisiton.toUpperCase() +
+                ' ' +
+                attrHeaders[n].headingAttrCell;
               headersTable.push(heading);
             }
           }
@@ -135,13 +143,32 @@ function jsonOutput(statsObject) {
   // statsTable = Object.assign({}, statsTable);
   statsObject = JSON.stringify(statsObject);
 
-  fs.writeFile("ffb-app/public/stats.json", statsObject, "utf8", function (err) {
-    if (err) {
-      console.log("An error occured while writing JSON Object to File.");
-      return console.log(err);
+  fs.writeFile(
+    'ffb-app/public/stats.json',
+    statsObject,
+    'utf8',
+    function (err) {
+      if (err) {
+        console.log("An error occured while writing player's stats to file.");
+        return console.log(err);
+      }
+      console.log('Stat file has been saved.');
+      fs.writeFile(
+        'ffb-app/public/stats-timestamp.json',
+        JSON.stringify(new Date()),
+        'utf8',
+        function (err) {
+          if (err) {
+            console.log(
+              "An error occured while writing the stat's timestamp to file."
+            );
+            return console.log(err);
+          }
+          console.log("Stat's timestamp has been saved.");
+        }
+      );
     }
-    console.log("Stats file has been saved.");
-  });
+  );
 }
 getStats();
 setTimeout(function () {
