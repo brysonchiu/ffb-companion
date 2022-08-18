@@ -20,7 +20,8 @@
     flex-direction: column;
     overflow-y: scroll;
     transform: translateX(-100%);
-    transition: background 0.2s cubic-bezier(0.65, 0.05, 0.36, 1), transform 0.4s cubic-bezier(0.65, 0.05, 0.36, 1);
+    transition: background 0.2s cubic-bezier(0.65, 0.05, 0.36, 1),
+      transform 0.4s cubic-bezier(0.65, 0.05, 0.36, 1);
     .app--dark & {
       background: $darkest;
       box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
@@ -239,7 +240,7 @@
     }
     .slider:before {
       position: absolute;
-      content: "";
+      content: '';
       height: 22px;
       width: 22px;
       left: 3px;
@@ -258,6 +259,17 @@
     }
     &:first-letter {
       text-transform: capitalize;
+    }
+    .app--dark & {
+      color: $lightest;
+    }
+  }
+  .stats-timestamp {
+    font-size: 0.75rem;
+    margin-top: 1rem;
+    font-weight: 500;
+    span {
+      font-weight: 400;
     }
     .app--dark & {
       color: $lightest;

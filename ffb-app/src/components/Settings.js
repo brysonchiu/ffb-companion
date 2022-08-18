@@ -1,6 +1,36 @@
-import { IconClose } from "./icons/close.js";
+import { useEffect, useState } from 'react';
+import { IconClose } from './icons/close.js';
 
-export function Settings({ settings, setSettings, setSentimentStatus, setDraftStatus, setCurrentPick }) {
+export function Settings({
+  settings,
+  setSettings,
+  setSentimentStatus,
+  setDraftStatus,
+  setCurrentPick,
+}) {
+  const [statsTimestamp, setStatsTimestamp] = useState('');
+
+  //get player stats timestamp
+  useEffect(() => {
+    (() => {
+      fetch('stats-timestamp.json', {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((time) => {
+          setStatsTimestamp(
+            new Date(time).toLocaleString([], {
+              dateStyle: 'short',
+              timeStyle: 'short',
+            })
+          );
+        });
+    })();
+  }, [setStatsTimestamp]);
+
   //closing the menu
   const handleSettingsMenu = () => {
     setSettings({
@@ -25,8 +55,10 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
   //set state for updating settings
   const updateSettings = (property, cat, value) => {
     let test;
-    cat === "scoring" ? (test = new RegExp(/^(?:-?[\d]*(?:\.?[\d]{1,2})||-?[\d]*\.||-)$/, "i")) : (test = new RegExp(/^\d+$/, "i"));
-    if (value === "" || test.test(value)) {
+    cat === 'scoring'
+      ? (test = new RegExp(/^(?:-?[\d]*(?:\.?[\d]{1,2})||-?[\d]*\.||-)$/, 'i'))
+      : (test = new RegExp(/^\d+$/, 'i'));
+    if (value === '' || test.test(value)) {
       const updatedSettings = { ...settings };
       updatedSettings[cat][property] = value;
       setSettings(updatedSettings);
@@ -34,7 +66,7 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
   };
   //toggling the color mode
   const handleColorMode = () => {
-    const targetMode = settings.misc?.color_mode === "light" ? "dark" : "light";
+    const targetMode = settings.misc?.color_mode === 'light' ? 'dark' : 'light';
     setSettings({
       ...settings,
       misc: {
@@ -55,8 +87,10 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
   };
   return (
     <div
-      className={`settings${settings["misc"]?.["menu_open"] ? " settings--open" : ""}${
-        settings["misc"]?.["menu_transition"] ? " settings--transitioning" : ""
+      className={`settings${
+        settings['misc']?.['menu_open'] ? ' settings--open' : ''
+      }${
+        settings['misc']?.['menu_transition'] ? ' settings--transitioning' : ''
       }`}
     >
       <div className="settings__container">
@@ -76,7 +110,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="teams"
                   type="text"
                   value={settings.general.teams}
-                  onChange={(e) => updateSettings(e.target.name, "general", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'general', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -89,7 +125,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="user_pick"
                   type="text"
                   value={settings.general.user_pick}
-                  onChange={(e) => updateSettings(e.target.name, "general", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'general', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -98,7 +136,12 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
             {settings.general?.flex_te !== undefined && (
               <div className="switch__container">
                 <label className="switch">
-                  <input type="checkbox" name="flex_te" checked={settings.general?.flex_te} onChange={(e) => handleToggle(e.target.name, "general")} />
+                  <input
+                    type="checkbox"
+                    name="flex_te"
+                    checked={settings.general?.flex_te}
+                    onChange={(e) => handleToggle(e.target.name, 'general')}
+                  />
                   <span className="slider slider--round"></span>
                 </label>
                 <p className="switch__text">TE included in flex</p>
@@ -107,7 +150,12 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
             {settings.general?.flex_qb !== undefined && (
               <div className="switch__container">
                 <label className="switch">
-                  <input type="checkbox" name="flex_qb" checked={settings.general?.flex_qb} onChange={(e) => handleToggle(e.target.name, "general")} />
+                  <input
+                    type="checkbox"
+                    name="flex_qb"
+                    checked={settings.general?.flex_qb}
+                    onChange={(e) => handleToggle(e.target.name, 'general')}
+                  />
                   <span className="slider slider--round"></span>
                 </label>
                 <p className="switch__text">QB included in flex</p>
@@ -125,7 +173,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="qb"
                   type="text"
                   value={settings.roster.qb}
-                  onChange={(e) => updateSettings(e.target.name, "roster", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'roster', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -138,7 +188,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="rb"
                   type="text"
                   value={settings.roster.rb}
-                  onChange={(e) => updateSettings(e.target.name, "roster", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'roster', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -151,7 +203,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="wr"
                   type="text"
                   value={settings.roster.wr}
-                  onChange={(e) => updateSettings(e.target.name, "roster", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'roster', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -164,7 +218,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="te"
                   type="text"
                   value={settings.roster.te}
-                  onChange={(e) => updateSettings(e.target.name, "roster", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'roster', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -177,7 +233,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="flex"
                   type="text"
                   value={settings.roster.flex}
-                  onChange={(e) => updateSettings(e.target.name, "roster", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'roster', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -190,7 +248,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="k"
                   type="text"
                   value={settings.roster.k}
-                  onChange={(e) => updateSettings(e.target.name, "roster", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'roster', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -203,7 +263,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst"
                   type="text"
                   value={settings.roster.dst}
-                  onChange={(e) => updateSettings(e.target.name, "roster", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'roster', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -216,7 +278,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="bench"
                   type="text"
                   value={settings.roster.bench}
-                  onChange={(e) => updateSettings(e.target.name, "roster", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'roster', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -233,7 +297,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="pass_yrds"
                   type="text"
                   value={settings.scoring.pass_yrds}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -246,7 +312,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="pass_td"
                   type="text"
                   value={settings.scoring.pass_td}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -259,7 +327,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="pass_comp"
                   type="text"
                   value={settings.scoring.pass_comp}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -272,7 +342,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="pass_int"
                   type="text"
                   value={settings.scoring.pass_int}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -286,7 +358,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="rush_yrds"
                   type="text"
                   value={settings.scoring.rush_yrds}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -299,7 +373,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="rush_td"
                   type="text"
                   value={settings.scoring.rush_td}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -313,7 +389,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="rec_yrds"
                   type="text"
                   value={settings.scoring.rec_yrds}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -326,7 +404,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="rec_td"
                   type="text"
                   value={settings.scoring.rec_td}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -339,7 +419,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="rec_rec"
                   type="text"
                   value={settings.scoring.rec_rec}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -353,7 +435,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="k_fg"
                   type="text"
                   value={settings.scoring.k_fg}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -366,7 +450,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="k_mfg"
                   type="text"
                   value={settings.scoring.k_mfg}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -379,11 +465,15 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="k_xpt"
                   type="text"
                   value={settings.scoring.k_xpt}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
-            <h4 className="settings__scoring-title">Defense: Sacks, Turnovers, & Scoring</h4>
+            <h4 className="settings__scoring-title">
+              Defense: Sacks, Turnovers, & Scoring
+            </h4>
             {settings.scoring?.dst_sk !== undefined && (
               <div className="input-containter">
                 <label htmlFor="dst_sk">SACK</label>
@@ -393,7 +483,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_sk"
                   type="text"
                   value={settings.scoring.dst_sk}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -406,7 +498,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_int"
                   type="text"
                   value={settings.scoring.dst_int}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -419,7 +513,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_fr"
                   type="text"
                   value={settings.scoring.dst_fr}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -432,7 +528,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_ff"
                   type="text"
                   value={settings.scoring.dst_ff}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -445,7 +543,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_td"
                   type="text"
                   value={settings.scoring.dst_td}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -458,7 +558,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_sf"
                   type="text"
                   value={settings.scoring.dst_sf}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -474,7 +576,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_pa_0"
                   type="text"
                   value={settings.scoring?.dst_pa_0}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -489,7 +593,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_pa_1_5"
                   type="text"
                   value={settings.scoring?.dst_pa_1_5}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -504,7 +610,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_pa_6_10"
                   type="text"
                   value={settings.scoring?.dst_pa_6_10}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -519,7 +627,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_pa_11_15"
                   type="text"
                   value={settings.scoring?.dst_pa_11_15}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -534,7 +644,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_pa_16_20"
                   type="text"
                   value={settings.scoring?.dst_pa_16_20}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -549,7 +661,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_pa_21_25"
                   type="text"
                   value={settings.scoring?.dst_pa_21_25}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -564,7 +678,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_pa_26_30"
                   type="text"
                   value={settings.scoring?.dst_pa_26_30}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -579,7 +695,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_pa_31_35"
                   type="text"
                   value={settings.scoring?.dst_pa_31_35}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -594,7 +712,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_pa_36_40"
                   type="text"
                   value={settings.scoring?.dst_pa_36_40}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -609,7 +729,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_pa_41_plus"
                   type="text"
                   value={settings.scoring?.dst_pa_41_plus}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -625,7 +747,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_ya_49"
                   type="text"
                   value={settings.scoring?.dst_ya_49}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -640,7 +764,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_ya_50_99"
                   type="text"
                   value={settings.scoring?.dst_ya_50_99}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -655,7 +781,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_ya_100_149"
                   type="text"
                   value={settings.scoring?.dst_ya_100_149}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -670,7 +798,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_ya_150_199"
                   type="text"
                   value={settings.scoring?.dst_ya_150_199}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -685,7 +815,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_ya_200_249"
                   type="text"
                   value={settings.scoring?.dst_ya_200_249}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -700,7 +832,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_ya_250_299"
                   type="text"
                   value={settings.scoring?.dst_ya_250_299}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -715,7 +849,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_ya_300_349"
                   type="text"
                   value={settings.scoring?.dst_ya_300_349}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -730,7 +866,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_ya_350_399"
                   type="text"
                   value={settings.scoring?.dst_ya_350_399}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -745,7 +883,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_ya_400_449"
                   type="text"
                   value={settings.scoring?.dst_ya_400_449}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -760,7 +900,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_ya_450_499"
                   type="text"
                   value={settings.scoring?.dst_ya_450_499}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -775,7 +917,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="dst_ya_500_plus"
                   type="text"
                   value={settings.scoring?.dst_ya_500_plus}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -789,7 +933,9 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
                   name="misc_fum"
                   type="text"
                   value={settings.scoring.misc_fum}
-                  onChange={(e) => updateSettings(e.target.name, "scoring", e.target.value)}
+                  onChange={(e) =>
+                    updateSettings(e.target.name, 'scoring', e.target.value)
+                  }
                 />
               </div>
             )}
@@ -801,10 +947,18 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
             {settings.misc?.color_mode !== undefined && (
               <div className="switch__container switch__container--color-mode">
                 <label className="switch">
-                  <input type="checkbox" checked={settings.misc?.color_mode === "dark" ? true : false} onChange={() => handleColorMode()} />
+                  <input
+                    type="checkbox"
+                    checked={
+                      settings.misc?.color_mode === 'dark' ? true : false
+                    }
+                    onChange={() => handleColorMode()}
+                  />
                   <span className="slider slider--round"></span>
                 </label>
-                <p className="switch__text switch__text--color-mode">{settings.misc?.color_mode} mode</p>
+                <p className="switch__text switch__text--color-mode">
+                  {settings.misc?.color_mode} mode
+                </p>
               </div>
             )}
           </div>
@@ -818,13 +972,24 @@ export function Settings({ settings, setSettings, setSentimentStatus, setDraftSt
             >
               Reset Draft Progress
             </button>
-            <button className="button button--negative" onClick={() => setSentimentStatus({})}>
+            <button
+              className="button button--negative"
+              onClick={() => setSentimentStatus({})}
+            >
               Reset Player Sentiment
             </button>
           </div>
         </div>
+        <div className="stats-timestamp">
+          Player stats last updated:{' '}
+          <span className="text--number">{statsTimestamp}</span>
+        </div>
       </div>
-      <div className="settings__overlay" onClick={() => handleSettingsMenu()} onTransitionEnd={() => handleSettingsMenuTransition()}></div>
+      <div
+        className="settings__overlay"
+        onClick={() => handleSettingsMenu()}
+        onTransitionEnd={() => handleSettingsMenuTransition()}
+      ></div>
     </div>
   );
 }
