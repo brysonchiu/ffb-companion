@@ -14,7 +14,7 @@ jobs:
       - name: Checkout Chron Branch
         uses: actions/checkout@v3
         with:
-          ref: cron/update-stats
+          ref: master
       - name: Setup Node.js environment
         uses: actions/setup-node@v3.4.1
         with:
@@ -25,3 +25,8 @@ jobs:
         run: npm ci
       - name: Run Scraper Script
         run: node scraper.js
+      - name: Commit and Push
+        run: |
+          git add ffb-app/public/stats.json ffb-app/public/stats-timestamp.json
+          git commit -m "automated player stats update"
+          git push
