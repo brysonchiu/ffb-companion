@@ -2,7 +2,7 @@ name: scrape-stats
 on:
   schedule:
     # Every day of August @ 2:30am
-    - cron: '08 11 * 8 *'
+    - cron: '47 11 * 8 *'
     # Days 1-15 of September @ 2:30am
     - cron: '30 2 1-15 9 *'
     # Every Tuesday of all other months @ 2:30am
