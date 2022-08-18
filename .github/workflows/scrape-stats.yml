@@ -2,11 +2,11 @@ name: scrape-stats
 on: 
   schedule:
     # Every day of August @ 2:30am
-    -chron: '08 11 * 8 *'
+    -cron: '08 11 * 8 *'
     # Days 1-15 of September @ 2:30am
-    -chron: '30 2 1-15 9 *'
+    -cron: '30 2 1-15 9 *'
     # Every Tuesday of all other months @ 2:30am
-    -chron: '30 2 * 1-7,10-12 2'
+    -cron: '30 2 * 1-7,10-12 2'
 jobs:
   scrape-stats:
     runs-on: macos-latest
@@ -14,7 +14,7 @@ jobs:
       - name: Checkout Chron Branch
         uses: actions/checkout@v3
         with:
-          ref: chron/update-stats
+          ref: cron/update-stats
       - name: Setup Node.js environment
         uses: actions/setup-node@v3.4.1
         with:
