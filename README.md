@@ -28,7 +28,7 @@ In a terminal window, run
     npm install
 
 ### Scraping Data:
-Data is scrapped on the following chron schedule vis Github action:
+Data is scrapped on the following chron schedule via Github action:
 - Every day of August @ 3:30am EST
 - Days 1-15 of September @ 3:30am EST
 - Every Tuesday of all other months @ 3:30am EST
