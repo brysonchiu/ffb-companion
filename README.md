@@ -23,7 +23,7 @@ This site is built on <a href="https://react.dev" target="_blank">React</a>.  Da
 In a terminal window, run
 
     git clone https://github.com/brysonchiu/ffb.git
-    cd ffb
+    cd ffb-companion
     nvm install
     npm install
 
