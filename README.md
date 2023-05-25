@@ -7,7 +7,7 @@
 
 <br />
 
-<a href="https://ffbcompanion.netlify.app" target="_blank"><img src="https://ffbcompanion.netlify.app/android-chrome-512x512.png" alt="Fantasy Football Companion" height="40" width="40" /> https://ffbcompanion.netlify.app</a>
+<a href="https://www.ffbcompanion.com" target="_blank"><img src="https://www.ffbcompanion.com/android-chrome-512x512.png" alt="Fantasy Football Companion" height="40" width="40" /> www.ffbcompanion.com</a>
 
 # Fantasy Football Companion
 The Fantasy Football Companion is meant to be a tool to accompany you at on your draft day.  Based on the concept of <a href="https://www.footballguys.com/article/2019-value-based-drafting" target="_blank">Value Based Drafting</a>, the companion is a way to rank players across positions and better visualize players left.
