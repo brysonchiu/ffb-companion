@@ -28,12 +28,12 @@ In a terminal window, run
     npm install
 
 ### Scraping Data:
-Data is scrapped on the following chron schedule:
+Data is scrapped on the following chron schedule vis Github action:
 - Every day of August @ 3:30am EST
 - Days 1-15 of September @ 3:30am EST
 - Every Tuesday of all other months @ 3:30am EST
 
-From the ffb directory, in terminal run
+If you need to pull data on demand, in the ffb-companion directory of the terminal, run
 
     node scraper.js
 
