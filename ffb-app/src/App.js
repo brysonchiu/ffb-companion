@@ -1,82 +1,20 @@
-import { useState, useEffect } from "react";
-import { Header } from "./components/Header.js";
-import { OverallList } from "./components/player/OverallList.js";
-import { PositionalLists } from "./components/player/PositionalLists.js";
-import { Settings } from "./components/Settings.js";
-import { MobileMessage } from "./components/MobileMessage.js";
-import { parseStringToFloat, calculateTotalPoints } from "./helpers.js";
-import { vbdPointRankings } from "./rostersAndRanks.js";
+import { useState, useEffect } from 'react';
+import { Header } from './components/Header.js';
+import { OverallList } from './components/player/OverallList.js';
+import { PositionalLists } from './components/player/PositionalLists.js';
+import { Settings } from './components/Settings.js';
+import { MobileMessage } from './components/MobileMessage.js';
+import { parseStringToFloat, calculateTotalPoints } from './helpers.js';
+import { vbdPointRankings } from './rostersAndRanks.js';
+import { defaultSettings } from './helpers/defaultSettings.js';
+import compareObjectsProperties from './helpers/compareObjectsProperties.js';
 
 function App() {
   const [players, setPlayers] = useState({});
   const [draftStatus, setDraftStatus] = useState({});
   const [sentimentStatus, setSentimentStatus] = useState({});
-  const [playerSearch, setPlayerSearch] = useState("");
-  const [settings, setSettings] = useState({
-    general: {
-      teams: 12,
-      user_pick: 1,
-      flex_te: true,
-      flex_qb: false,
-    },
-    roster: {
-      qb: 1,
-      rb: 2,
-      wr: 2,
-      te: 1,
-      k: 1,
-      dst: 1,
-      flex: 1,
-      bench: 7,
-    },
-    scoring: {
-      pass_yrds: 0.04,
-      pass_td: 6,
-      pass_comp: 0,
-      pass_int: -2,
-      rush_yrds: 0.1,
-      rush_td: 6,
-      rec_yrds: 0.1,
-      rec_td: 6,
-      rec_rec: 1,
-      k_fg: 4,
-      k_mfg: -1,
-      k_xpt: 1,
-      dst_sk: 1,
-      dst_int: 2,
-      dst_fr: 2,
-      dst_ff: 0,
-      dst_td: 6,
-      dst_sf: 2,
-      dst_pa_0: 5,
-      dst_pa_1_5: 4,
-      dst_pa_6_10: 3,
-      dst_pa_11_15: 1,
-      dst_pa_16_20: 0,
-      dst_pa_21_25: 0,
-      dst_pa_26_30: -1,
-      dst_pa_31_35: -1,
-      dst_pa_36_40: -3,
-      dst_pa_40_plus: -5,
-      dst_ya_49: 0,
-      dst_ya_50_99: 0,
-      dst_ya_100_149: 0,
-      dst_ya_150_199: 0,
-      dst_ya_200_249: 0,
-      dst_ya_250_299: 0,
-      dst_ya_300_349: 0,
-      dst_ya_350_399: 0,
-      dst_ya_400_449: 0,
-      dst_ya_450_499: 0,
-      dst_ya_500_plus: 0,
-      misc_fum: -2,
-    },
-    misc: {
-      menu_open: false,
-      menu_transition: false,
-      color_mode: "light",
-    },
-  });
+  const [playerSearch, setPlayerSearch] = useState('');
+  const [settings, setSettings] = useState(defaultSettings);
   const [playerStatusFilters, setPlayerStatusFilters] = useState({
     undrafted: true,
     drafted: true,
@@ -92,10 +30,10 @@ function App() {
   useEffect(() => {
     // Fetch for the stats json file
     const getStats = () => {
-      fetch("stats.json", {
+      fetch('stats.json', {
         headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
         },
       })
         .then(function (response) {
@@ -108,16 +46,20 @@ function App() {
     getStats();
 
     //Get sentimet status from local storage
-    if (localStorage.getItem("sentimentStatus")) setSentimentStatus(JSON.parse(localStorage.getItem("sentimentStatus")));
+    if (localStorage.getItem('sentimentStatus')) setSentimentStatus(JSON.parse(localStorage.getItem('sentimentStatus')));
 
     //Get draft status from local storage
-    if (localStorage.getItem("draftStatus")) setDraftStatus(JSON.parse(localStorage.getItem("draftStatus")));
+    if (localStorage.getItem('draftStatus')) setDraftStatus(JSON.parse(localStorage.getItem('draftStatus')));
 
     //Get current pick from local storage
-    if (localStorage.getItem("currentPick")) setCurrentPick(parseStringToFloat(localStorage.getItem("currentPick")));
+    if (localStorage.getItem('currentPick')) setCurrentPick(parseStringToFloat(localStorage.getItem('currentPick')));
 
     //Set default settings
-    if (localStorage.getItem("settings")) setSettings(JSON.parse(localStorage.getItem("settings")));
+    if (localStorage.getItem('settings')) {
+      compareObjectsProperties(defaultSettings, JSON.parse(localStorage.getItem('settings')))
+        ? setSettings(JSON.parse(localStorage.getItem('settings')))
+        : setSettings(defaultSettings);
+    }
   }, []);
 
   // Calculate players' total points and rank (sort)
@@ -136,6 +78,7 @@ function App() {
     updateTotalPoints(players, settings.scoring);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    settings.scoring?.independent_positional_scoring,
     settings.scoring?.misc_fum,
     settings.scoring?.pass_comp,
     settings.scoring?.pass_int,
@@ -176,6 +119,21 @@ function App() {
     settings.scoring?.dst_ya_400_449,
     settings.scoring?.dst_ya_450_499,
     settings.scoring?.dst_ya_500_plus,
+    settings.scoring?.qb_rush_td,
+    settings.scoring?.qb_rush_yrds,
+    settings.scoring?.rb_rec_rec,
+    settings.scoring?.rb_rec_td,
+    settings.scoring?.rb_rec_yrds,
+    settings.scoring?.rb_rush_td,
+    settings.scoring?.rb_rush_yrds,
+    settings.scoring?.wr_rec_rec,
+    settings.scoring?.wr_rec_td,
+    settings.scoring?.wr_rec_yrds,
+    settings.scoring?.wr_rush_td,
+    settings.scoring?.wr_rush_yrds,
+    settings.scoring?.te_rec_rec,
+    settings.scoring?.te_rec_td,
+    settings.scoring?.te_rec_yrds,
     players,
   ]);
 
@@ -229,7 +187,7 @@ function App() {
     }
   };
   useEffect(() => {
-    localStorage.setItem("draftStatus", JSON.stringify(draftStatus));
+    localStorage.setItem('draftStatus', JSON.stringify(draftStatus));
   }, [draftStatus]);
 
   //Update Sentiment Status
@@ -247,16 +205,16 @@ function App() {
     }
   };
   useEffect(() => {
-    localStorage.setItem("sentimentStatus", JSON.stringify(sentimentStatus));
+    localStorage.setItem('sentimentStatus', JSON.stringify(sentimentStatus));
   }, [sentimentStatus]);
 
   //Set current pick to local storage
   useEffect(() => {
-    localStorage.setItem("currentPick", currentPick);
+    localStorage.setItem('currentPick', currentPick);
   }, [currentPick]);
 
   useEffect(() => {
-    localStorage.setItem("settings", JSON.stringify(settings));
+    localStorage.setItem('settings', JSON.stringify(settings));
   }, [settings]);
 
   return (

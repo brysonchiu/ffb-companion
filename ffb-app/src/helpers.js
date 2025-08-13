@@ -1,10 +1,10 @@
 //Turns a string into a float
 export function parseStringToFloat(num) {
-  const onlyPeriodsOrDash = new RegExp(/^[.-]*$/, "i");
-  if (!num || num === "" || onlyPeriodsOrDash.test(num)) {
+  const onlyPeriodsOrDash = new RegExp(/^[.-]*$/, 'i');
+  if (!num || num === '' || onlyPeriodsOrDash.test(num)) {
     return 0;
-  } else if (typeof num === "string") {
-    num = parseFloat(num.replace(/,/g, ""));
+  } else if (typeof num === 'string') {
+    num = parseFloat(num.replace(/,/g, ''));
   }
   return num;
 }
@@ -14,7 +14,7 @@ export function roundNumber(num) {
   num = parseStringToFloat(num);
   num = Math.round(num)
     .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return num;
 }
 
@@ -40,38 +40,61 @@ export function rosterSize(settings) {
 //Calculate Total Points
 export function calculateTotalPoints(scoring, players, playerId) {
   let totalPoints = 0;
-  if (players[playerId]["POSITION"] !== "DST" || players[playerId]["POSITION"] !== "K") {
-    totalPoints += parseStringToFloat(scoring.misc_fum) * parseStringToFloat(players[playerId]["MISC FL"]);
+  if (players[playerId]['POSITION'] !== 'DST' || players[playerId]['POSITION'] !== 'K') {
+    totalPoints += parseStringToFloat(scoring.misc_fum) * parseStringToFloat(players[playerId]['MISC FL']);
   }
-  if (players[playerId]["POSITION"] === "QB") {
-    totalPoints += parseStringToFloat(scoring.pass_comp) * parseStringToFloat(players[playerId]["PASSING CMP"]);
-    totalPoints += parseStringToFloat(scoring.pass_int) * parseStringToFloat(players[playerId]["PASSING INTS"]);
-    totalPoints += parseStringToFloat(scoring.pass_td) * parseStringToFloat(players[playerId]["PASSING TDS"]);
-    totalPoints += parseStringToFloat(scoring.pass_yrds) * parseStringToFloat(players[playerId]["PASSING YDS"]);
+  if (players[playerId]['POSITION'] === 'QB') {
+    totalPoints += parseStringToFloat(scoring.pass_comp) * parseStringToFloat(players[playerId]['PASSING CMP']);
+    totalPoints += parseStringToFloat(scoring.pass_int) * parseStringToFloat(players[playerId]['PASSING INTS']);
+    totalPoints += parseStringToFloat(scoring.pass_td) * parseStringToFloat(players[playerId]['PASSING TDS']);
+    totalPoints += parseStringToFloat(scoring.pass_yrds) * parseStringToFloat(players[playerId]['PASSING YDS']);
   }
-  if (players[playerId]["POSITION"] === "WR" || players[playerId]["POSITION"] === "TE" || players[playerId]["POSITION"] === "RB") {
-    totalPoints += parseStringToFloat(scoring.rec_rec) * parseStringToFloat(players[playerId]["RECEIVING REC"]);
-    totalPoints += parseStringToFloat(scoring.rec_td) * parseStringToFloat(players[playerId]["RECEIVING TDS"]);
-    totalPoints += parseStringToFloat(scoring.rec_yrds) * parseStringToFloat(players[playerId]["RECEIVING YDS"]);
+  if (!scoring?.independent_positional_scoring) {
+    if (players[playerId]['POSITION'] === 'WR' || players[playerId]['POSITION'] === 'TE' || players[playerId]['POSITION'] === 'RB') {
+      totalPoints += parseStringToFloat(scoring.rec_rec) * parseStringToFloat(players[playerId]['RECEIVING REC']);
+      totalPoints += parseStringToFloat(scoring.rec_td) * parseStringToFloat(players[playerId]['RECEIVING TDS']);
+      totalPoints += parseStringToFloat(scoring.rec_yrds) * parseStringToFloat(players[playerId]['RECEIVING YDS']);
+    }
+    if (players[playerId]['POSITION'] === 'QB' || players[playerId]['POSITION'] === 'RB' || players[playerId]['POSITION'] === 'WR') {
+      totalPoints += parseStringToFloat(scoring.rush_td) * parseStringToFloat(players[playerId]['RUSHING TDS']);
+      totalPoints += parseStringToFloat(scoring.rush_yrds) * parseStringToFloat(players[playerId]['RUSHING YDS']);
+    }
+  } else {
+    if (players[playerId]['POSITION'] === 'QB') {
+      totalPoints += parseStringToFloat(scoring.qb_rush_td) * parseStringToFloat(players[playerId]['RUSHING TDS']);
+      totalPoints += parseStringToFloat(scoring.qb_rush_yrds) * parseStringToFloat(players[playerId]['RUSHING YDS']);
+    } else if (players[playerId]['POSITION'] === 'RB') {
+      totalPoints += parseStringToFloat(scoring.rb_rush_td) * parseStringToFloat(players[playerId]['RUSHING TDS']);
+      totalPoints += parseStringToFloat(scoring.rb_rush_yrds) * parseStringToFloat(players[playerId]['RUSHING YDS']);
+      totalPoints += parseStringToFloat(scoring.rb_rec_rec) * parseStringToFloat(players[playerId]['RECEIVING REC']);
+      totalPoints += parseStringToFloat(scoring.rb_rec_td) * parseStringToFloat(players[playerId]['RECEIVING TDS']);
+      totalPoints += parseStringToFloat(scoring.rb_rec_yrds) * parseStringToFloat(players[playerId]['RECEIVING YDS']);
+    } else if (players[playerId]['POSITION'] === 'WR') {
+      totalPoints += parseStringToFloat(scoring.wr_rush_td) * parseStringToFloat(players[playerId]['RUSHING TDS']);
+      totalPoints += parseStringToFloat(scoring.wr_rush_yrds) * parseStringToFloat(players[playerId]['RUSHING YDS']);
+      totalPoints += parseStringToFloat(scoring.wr_rec_rec) * parseStringToFloat(players[playerId]['RECEIVING REC']);
+      totalPoints += parseStringToFloat(scoring.wr_rec_td) * parseStringToFloat(players[playerId]['RECEIVING TDS']);
+      totalPoints += parseStringToFloat(scoring.wr_rec_yrds) * parseStringToFloat(players[playerId]['RECEIVING YDS']);
+    } else if (players[playerId]['POSITION'] === 'TE') {
+      totalPoints += parseStringToFloat(scoring.te_rec_rec) * parseStringToFloat(players[playerId]['RECEIVING REC']);
+      totalPoints += parseStringToFloat(scoring.te_rec_td) * parseStringToFloat(players[playerId]['RECEIVING TDS']);
+      totalPoints += parseStringToFloat(scoring.te_rec_yrds) * parseStringToFloat(players[playerId]['RECEIVING YDS']);
+    }
   }
-  if (players[playerId]["POSITION"] === "QB" || players[playerId]["POSITION"] === "RB" || players[playerId]["POSITION"] === "WR") {
-    totalPoints += parseStringToFloat(scoring.rush_td) * parseStringToFloat(players[playerId]["RUSHING TDS"]);
-    totalPoints += parseStringToFloat(scoring.rush_yrds) * parseStringToFloat(players[playerId]["RUSHING YDS"]);
+  if (players[playerId]['POSITION'] === 'K') {
+    totalPoints += parseStringToFloat(scoring.k_fg) * parseStringToFloat(players[playerId]['K FG']);
+    totalPoints += parseStringToFloat(scoring.k_mfg) * (parseStringToFloat(players[playerId]['K FGA']) - parseStringToFloat(players[playerId]['K FG']));
+    totalPoints += parseStringToFloat(scoring.k_xpt) * parseStringToFloat(players[playerId]['K XPT']);
   }
-  if (players[playerId]["POSITION"] === "K") {
-    totalPoints += parseStringToFloat(scoring.k_fg) * parseStringToFloat(players[playerId]["K FG"]);
-    totalPoints += parseStringToFloat(scoring.k_mfg) * (parseStringToFloat(players[playerId]["K FGA"]) - parseStringToFloat(players[playerId]["K FG"]));
-    totalPoints += parseStringToFloat(scoring.k_xpt) * parseStringToFloat(players[playerId]["K XPT"]);
-  }
-  if (players[playerId]["POSITION"] === "DST") {
-    totalPoints += parseStringToFloat(scoring.dst_sk) * parseStringToFloat(players[playerId]["DST SACK"]);
-    totalPoints += parseStringToFloat(scoring.dst_int) * parseStringToFloat(players[playerId]["DST INT"]);
-    totalPoints += parseStringToFloat(scoring.dst_fr) * parseStringToFloat(players[playerId]["DST FR"]);
-    totalPoints += parseStringToFloat(scoring.dst_ff) * parseStringToFloat(players[playerId]["DST FF"]);
-    totalPoints += parseStringToFloat(scoring.dst_td) * parseStringToFloat(players[playerId]["DST TD"]);
-    totalPoints += parseStringToFloat(scoring.dst_sf) * parseStringToFloat(players[playerId]["DST SAFETY"]);
-    totalPoints += calculatePointsAllowed(scoring, players[playerId]["DST PA"]);
-    totalPoints += calculateYardsAllowed(scoring, players[playerId]["DST YDS AGN"]);
+  if (players[playerId]['POSITION'] === 'DST') {
+    totalPoints += parseStringToFloat(scoring.dst_sk) * parseStringToFloat(players[playerId]['DST SACK']);
+    totalPoints += parseStringToFloat(scoring.dst_int) * parseStringToFloat(players[playerId]['DST INT']);
+    totalPoints += parseStringToFloat(scoring.dst_fr) * parseStringToFloat(players[playerId]['DST FR']);
+    totalPoints += parseStringToFloat(scoring.dst_ff) * parseStringToFloat(players[playerId]['DST FF']);
+    totalPoints += parseStringToFloat(scoring.dst_td) * parseStringToFloat(players[playerId]['DST TD']);
+    totalPoints += parseStringToFloat(scoring.dst_sf) * parseStringToFloat(players[playerId]['DST SAFETY']);
+    totalPoints += calculatePointsAllowed(scoring, players[playerId]['DST PA']);
+    totalPoints += calculateYardsAllowed(scoring, players[playerId]['DST YDS AGN']);
   }
   return totalPoints;
 }
