@@ -1,5 +1,6 @@
 name: scrape-stats
 on:
+  workflow_dispatch:
   schedule:
     # Every day of August @ 3:30am EST (7:30 UTC)
     - cron: '30 7 * 8 *'
